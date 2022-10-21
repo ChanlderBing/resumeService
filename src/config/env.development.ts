@@ -1,3 +1,5 @@
+import { PostsEntity } from '../posts/posts.entity';
+
 export default {
     // 服务基本配置
     SERVICE_CONFIG: {
@@ -15,5 +17,6 @@ export default {
       database: 'superresume',
       autoLoadEntities: true,
       synchronize: true,
+      entitirs:[PostsEntity],
     },
   };
