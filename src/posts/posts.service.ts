@@ -23,6 +23,8 @@ export class PostsService {
   }
   async update(post: Partial<PostsEntity>): Promise<PostsEntity> {
     const {information} = post;
-    return await this.postsRepository.query(`update user set information = ${information} where id ='2'`);
+    const {code,msg} = await this.postsRepository.query(`update user set information = ${information} where id ='5'`);
+
+    return  msg
   }
 }
