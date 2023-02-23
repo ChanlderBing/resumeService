@@ -1,4 +1,4 @@
-import { PostsEntity } from '../posts/posts.entity';
+import { userEntity,personalEntity,workEntity } from '../posts/posts.entity';
 
 export default {
     // 服务基本配置
@@ -17,6 +17,5 @@ export default {
       database: 'superresume',
       autoLoadEntities: true,
       synchronize: true,
-      entitirs:[PostsEntity],
     },
   };
