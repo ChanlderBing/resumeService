@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 
 @Module({
@@ -12,11 +12,11 @@ import { jwtConstants } from './constants';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '8h' }, // token 过期时效
+      signOptions: { expiresIn: '8h' },
     }),
-    UserModule,
+    UserModule
   ],
-  providers: [AuthService,  JwtStrategy],
+  providers: [AuthService,JwtStrategy,JwtService],
   exports: [AuthService],
 })
 export class AuthModule {}

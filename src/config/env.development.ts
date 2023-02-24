@@ -1,4 +1,4 @@
-import { userEntity,personalEntity,workEntity } from '../posts/posts.entity';
+
 
 export default {
     // 服务基本配置

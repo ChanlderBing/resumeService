@@ -9,12 +9,12 @@ export class AuthService {
   constructor(private readonly usersService: UserService, private readonly jwtService: JwtService) {}
 
   // JWT验证 - Step 2: 校验用户信息
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(userName: string, password: string): Promise<any> {
     console.log('JWT验证 - Step 2: 校验用户信息');
-    const user = await this.usersService.findOne(username);
-    if (user) {
-      const hashedPassword = user.password;
-      const salt = user.password_salt;
+    const user = await this.usersService.findOne(userName);
+    if (Array.prototype.isPrototypeOf(user) && user.length !== 0) {
+      const hashedPassword = user[0].password;
+      const salt = user[0].passwordSalt;
       // 通过密码盐，加密传参，再与数据库里的比较，判断是否相等
       const hashPassword = encryptPassword(password, salt);
       if (hashedPassword === hashPassword) {
@@ -40,9 +40,12 @@ export class AuthService {
 
   // JWT验证 - Step 3: 处理 jwt 签证
   async certificate(user: any) {
-    const payload = { username: user.username, sub: user.userId, realName: user.realName, role: user.role };
+    console.log('JWT验证 - Step 3: 处理 jwt 签证');
+    const payload = { username: user[0].userName };
     try {
       const token = this.jwtService.sign(payload);
+      console.log(this.jwtService.sign(payload));
+      
       return {
         code: 200,
         data: {
