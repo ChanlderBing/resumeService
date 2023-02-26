@@ -43,9 +43,7 @@ export class AuthService {
     console.log('JWT验证 - Step 3: 处理 jwt 签证');
     const payload = { username: user[0].userName };
     try {
-      const token = this.jwtService.sign(payload);
-      console.log(this.jwtService.sign(payload));
-      
+      const token = this.jwtService.sign(payload);    
       return {
         code: 200,
         data: {

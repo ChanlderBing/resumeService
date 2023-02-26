@@ -13,8 +13,6 @@ export class UserController {
     @Post('login')
     async login(@Body() loginParmas: any) {
         console.log('JWT验证 - Step 1: 用户请求登录');
-        console.log(loginParmas);
-        
         const authResult = await this.authService.validateUser(loginParmas.userName, loginParmas.password);
         switch (authResult.code) {
         case 1:

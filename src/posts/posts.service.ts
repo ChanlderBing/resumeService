@@ -16,8 +16,8 @@ export class PostsService {
   // async create(post: Partial<userEntity>): Promise<userEntity> {
   //   return await this.postsRepository.save(post);
   // }
-  // async update(post: Partial<userEntity>): Promise<userEntity> {
-  //   const {code,msg} = await this.postsRepository.query(`update user set where id ='5'`);
-  //   return  msg
-  // }
+  async update(): Promise<any> {
+  const msg = 'niu'
+    return  msg
+  }
 }
