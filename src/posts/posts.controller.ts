@@ -9,18 +9,15 @@ export class PostsController {
 
 
     @UseGuards(AuthGuard('jwt'))
-    @Post('update')
-    async update(@Body() post,@Req() request:Request){
-        console.log(request);
-        return await this.postsService.update()
+    @Post('setUserResume')
+    async setUserResume(@Body() post,@Req() request){
+        return await this.postsService.update(post,request.user.id)
     }
  
     @UseGuards(AuthGuard('jwt'))
     @Get('getUserResume')
     async getUserResume(@Body() get,@Req() request){
-        console.log(request.user);
-        
-        return await this.postsService.getUserResume()
+         await this.postsService.getUserResume(request.user.id)
     }
  
 }

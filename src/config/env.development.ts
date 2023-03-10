@@ -17,5 +17,6 @@ export default {
       database: 'superresume',
       autoLoadEntities: true,
       synchronize: true,
+      entities: [__dirname + "/entities/*{.js,.ts}"],
     },
   };
