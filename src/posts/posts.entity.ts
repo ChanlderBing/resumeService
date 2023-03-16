@@ -94,7 +94,7 @@ export class summaryEntity {
     @Column()
     richText: string;
     @Column()
-    sortIndex:number
+    modelIndex:number
 }
 
 @Entity("project")
