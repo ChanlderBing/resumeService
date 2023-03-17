@@ -50,8 +50,6 @@ export class schoolEntity {
     @Column({type: 'timestamp'})
     endTime: Date
     @Column()
-    modelIndex:number
-    @Column()
     sortIndex:number
 }
 
@@ -77,8 +75,6 @@ export class workEntity {
     startTime: Date
     @Column({type: 'timestamp'})
     endTime: Date
-    @Column()
-    modelIndex:number
     @Column()
     sortIndex:number
 }
@@ -116,8 +112,6 @@ export class projectEntity {
     @Column()
     richText: string;
     @Column()
-    modelIndex:number
-    @Column()
     sortIndex:number
 }
 @Entity("resume")
@@ -131,17 +125,6 @@ export class resumeEntity {
     @Column()
     sortId:number
     
-    // @OneToOne(type =>personalmodelEntity, personalmodel =>personalmodel.id)
-    // @JoinColumn()
-    // personalmodel:personalmodelEntity;
-
-    // @OneToOne(type =>resumemodelEntity, personalmodel =>personalmodel.id)
-    // @JoinColumn()
-    // resumemodel: personalmodelEntity;
-
-    // @ManyToOne(() => userEntity, (user) =>user.resume)
-    // @JoinColumn()
-    // user: userEntity;
 }
 
 

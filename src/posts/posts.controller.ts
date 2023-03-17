@@ -13,6 +13,11 @@ export class PostsController {
     async setPerson(@Body() post,@Req() request){
         return await this.postsService.setPerson(post)
     }
+    
+    @Post('updatePerson')
+    async updatePerson(@Body() post,@Req() request){
+        return await this.postsService.updatePerson(post)
+    }
     @UseGuards(AuthGuard('jwt'))
     @Post('setWork')
     async setWork(@Body() post,@Req() request){

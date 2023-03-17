@@ -11,7 +11,8 @@ export class resumemodelEntity {
     @Column()
     resumeId:number
 
-    
+    @Column()
+    modelIndex:number
     // @OneToOne(type =>resumeEntity, resume => resume)
     // @JoinColumn()
     // resume: resumeEntity;
