@@ -8,30 +8,27 @@ export class PostsController {
     constructor(private readonly postsService:PostsService){}
 
 
-    //@UseGuards(AuthGuard('jwt'))
-    @Post('setPerson')
+    @UseGuards(AuthGuard('jwt'))
+    @Post('setUserResume')
     async setPerson(@Body() post,@Req() request){
-        return await this.postsService.setPerson(post)
+        return await this.postsService.setUserResume(request.user.id,post)
     }
     
     @Post('updatePerson')
     async updatePerson(@Body() post,@Req() request){
         return await this.postsService.updatePerson(post)
     }
-    @UseGuards(AuthGuard('jwt'))
-    @Post('setWork')
-    async setWork(@Body() post,@Req() request){
-        return await this.postsService.setWork(post)
+    @Post('updateProject')
+    async updateProject(@Body() post,@Req() request){
+        return await this.postsService.updateProject(post)
     }
-    @UseGuards(AuthGuard('jwt'))
-    @Post('setSchool')
-    async setSchool(@Body() post,@Req() request){
-        return await this.postsService.setSchool(post)
+    @Post('updateWork')
+    async updateWork(@Body() post,@Req() request){
+        return await this.postsService.updateWork(post)
     }
-    @UseGuards(AuthGuard('jwt'))
-    @Post('setSummary')
-    async setSummary(@Body() post,@Req() request){
-        return await this.postsService.setSummary(post)
+    @Post('updateSchool')
+    async updateSchool(@Body() post,@Req() request){
+        return await this.postsService.updateSchool(post)
     }
  
     @UseGuards(AuthGuard('jwt'))
