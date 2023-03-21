@@ -9,21 +9,21 @@ export class personalEntity {
     resumeId:number
     @Column({length:20,nullable: true})
     userName: string;
-    @Column()
+    @Column({nullable: true})
     title: string;
-    @Column()
+    @Column({nullable: true})
     cityYoulived: string;
-    @Column()
+    @Column({nullable: true})
     degree: string;
-    @Column()
+    @Column({nullable: true})
     email: string;
-    @Column()
+    @Column({nullable: true})
     phoneNumber: string;
-    @Column()
+    @Column({nullable: true})
     cityItent: string;
-    @Column()
+    @Column({nullable: true})
     currentStatus: string;
-    @Column()
+    @Column({nullable: true})
     postIntent: string;
 
 }
@@ -31,25 +31,25 @@ export class personalEntity {
 export class schoolEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
-    @Column()
+    @Column({nullable: true})
     resumemodelId: number;
-    @Column()
+    @Column({nullable: true})
     title: string;
-    @Column()
+    @Column({nullable: true})
     academy: string;
-    @Column()
+    @Column({nullable: true})
     degree: string;
-    @Column()
+    @Column({nullable: true})
     major: string;
-    @Column()
+    @Column({nullable: true})
     school: string;
-    @Column()
+    @Column({nullable: true})
     richText: string;
-    @Column({type: 'timestamp'})
+    @Column({type: 'timestamp',nullable: true})
     startTime: Date
-    @Column({type: 'timestamp'})
+    @Column({type: 'timestamp',nullable: true})
     endTime: Date
-    @Column()
+    @Column({nullable: true})
     sortIndex:number
 }
 
@@ -57,23 +57,23 @@ export class schoolEntity {
 export class workEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
-    @Column()
+    @Column({nullable: true})
     resumemodelId: number;
-    @Column()
+    @Column({nullable: true})
     title: string;
-    @Column()
+    @Column({nullable: true})
     experienceName: string;
-    @Column()
+    @Column({nullable: true})
     role: string;
-    @Column()
+    @Column({nullable: true})
     department: string;
-    @Column()
+    @Column({nullable: true})
     city: string;
-    @Column()
+    @Column({nullable: true})
     richText: string;
-    @Column({type: 'timestamp'})
+    @Column({type: 'timestamp',nullable: true})
     startTime: Date
-    @Column({type: 'timestamp'})
+    @Column({type: 'timestamp',nullable: true})
     endTime: Date
     @Column()
     sortIndex:number
@@ -83,13 +83,13 @@ export class workEntity {
 export class summaryEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
-    @Column()
+    @Column({nullable: true})
     resumemodelId: number;
-    @Column()
+    @Column({nullable: true})
     title: string;
-    @Column()
+    @Column({nullable: true})
     richText: string;
-    @Column()
+    @Column({nullable: true})
     modelIndex:number
 }
 
@@ -97,21 +97,21 @@ export class summaryEntity {
 export class projectEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
-    @Column()
+    @Column({nullable: true})
     resumemodelId: number;
-    @Column()
+    @Column({nullable: true})
     projectName: string;
-    @Column()
+    @Column({nullable: true})
     projectDescription: string;
-    @Column()
+    @Column({nullable: true})
     city: string;
-    @Column({type: 'timestamp'})
+    @Column({type: 'timestamp',nullable: true})
     startTime: Date
-    @Column({type: 'timestamp'})
+    @Column({type: 'timestamp',nullable: true})
     endTime: Date
-    @Column()
+    @Column({nullable: true})
     richText: string;
-    @Column()
+    @Column({nullable: true})
     sortIndex:number
 }
 @Entity("resume")

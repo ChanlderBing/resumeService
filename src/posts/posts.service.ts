@@ -74,40 +74,39 @@ export class PostsService {
     }
   async setUserResume(userId:number=10,post) {
     const sqlToCheck = `select COUNT(*) from resume where userId = ${userId}`
-    //const sortId =  (await this.postsRepository.query(sqlToCheck)) + 1
-    const sqlToPerson = `insert into resume values(null,${userId},5)`
-    const data =  await this.postsRepository.query(sqlToPerson)
-    this.setPerson(post)
+    const sortId =  parseInt((await this.postsRepository.query(sqlToCheck))[0]["COUNT(*)"])+1
+    const sqlToPerson = `insert into resume values(null,${userId},${sortId})`
+    const insertId =  (await this.postsRepository.query(sqlToPerson)).insertId 
+    this.setPerson(insertId,post)
+    this.setProject(insertId,null)
+    this.setSchool(insertId,null)
+    this.setSummary(insertId,null)
+    this.setWork(insertId,null)
       return {
-      msg:'生成成功'
+      sortId:sortId
       }
     }
 
-  async setPerson(post) {
-    let data;
-    if (post) {
-       const sqlToPerson = `insert into personal values(null,${post.resumeId},${post.userName},${post.title},${post.cityYoulived},${post.degree},${post.email},${post.phoneNumber},${post.cityItent},${post.currentStatus},${post.postIntent})`
-       data =  await this.postsRepository.query(sqlToPerson)
-    }else{
-      const sqlToPerson = `insert into personal(id)
-      values(null)`
-       data =  await this.postsRepository.query(sqlToPerson)
-    }
+  async setPerson(resumeId,post) {
+      const sqlToPerson = `insert into personal values(null,${resumeId},${post.userName},${post.title},${post.cityYoulived},${post.degree},${post.email},${post.phoneNumber},${post.cityItent},${post.currentStatus},${post.postIntent})`
+      const data =  await this.postsRepository.query(sqlToPerson)
       return {
       msg:data
       }
     }
         
-  async setProject(post) {
+  async setProject(resumeId,post) {
     let data;
     if (post) {
-      const sqlToPerson = `insert into project
+      const sqlToModel = `insert into resumemodel values(null,${resumeId},2) `
+       const    data1 =  await this.postsRepository.query(sqlToModel)
+      const sqlToProject = `insert into project
           values(null,${post.resumemodelId}${post.projectName},${post.projectDescription},${post.city},${post.startTime},${post.endTime},${post.richText},${post.modelIndex},${post.sortIndex})`
-          data =  await this.postsRepository.query(sqlToPerson)
+          data =  await this.postsRepository.query(sqlToProject)
     }else{
-      const sqlToPerson = `insert into project(id)
+      const sqlToProject = `insert into project(id)
       values(null)`
-       data =  await this.postsRepository.query(sqlToPerson)
+       data =  await this.postsRepository.query(sqlToProject)
     }
       return {
       msg:data
@@ -115,24 +114,46 @@ export class PostsService {
     }
 
   async setWork(post) {
-  const sqlToWork = `insert into work values(null,${post.resumemodelId},${post.title},${post.experienceName},${post.role},${post.department},${post.city},${post.richText},${post.startTime},${post.endTime},${post.sortIndex})`
-  const data =  await this.postsRepository.query(sqlToWork)
-    return {
-    msg:data
+    let data;
+    if (post) {
+      const sqlToWork = `insert into work values(null,${post.resumemodelId},${post.title},${post.experienceName},${post.role},${post.department},${post.city},${post.richText},${post.startTime},${post.endTime},${post.sortIndex})`
+      data =  await this.postsRepository.query(sqlToWork)
+    }else{
+      const sqlToWork = `insert into work(id)
+      values(null)`
+       data =  await this.postsRepository.query(sqlToWork)
     }
+      return {
+      msg:data
+      }
   }
 
   async setSchool(post) {
-    const sqlToPerson = `insert into school values((null,${post.resumemodelId},${post.title},${post.academy},${post.degree},${post.major},${post.school},${post.richText},${post.startTime},${post.endTime},${post.sortIndex},${post.modelIndex})`
-    const data =  await this.postsRepository.query(sqlToPerson)
+    let data;
+    if (post) {
+      const sqlToSchool = `insert into school values((null,${post.resumemodelId},${post.title},${post.academy},${post.degree},${post.major},${post.school},${post.richText},${post.startTime},${post.endTime},${post.sortIndex},${post.modelIndex})`
+      data =  await this.postsRepository.query(sqlToSchool)
+    }else{
+      const sqlToSchool  = `insert into school(id)
+      values(null)`
+       data =  await this.postsRepository.query(sqlToSchool )
+    }
       return {
       msg:"插入成功"
       }
     }
 
   async setSummary(post) {
-    const sqlToWork = `insert into summary values(null,${post.resumemodelId},${post.title},${post.richText},${post.startTime},${post.endTime})`
-    const data =  (await this.postsRepository.query(sqlToWork))
+    let data;
+    if (post) {
+      const sqlToSummary = `insert into summary values(null,${post.resumemodelId},${post.title},${post.richText},${post.startTime},${post.endTime})`
+      data =  (await this.postsRepository.query(sqlToSummary))
+    }else{
+      const sqlToSummary  = `insert into summary(id)
+      values(null)`
+       data =  await this.postsRepository.query(sqlToSummary)
+    }
+ 
       return {
       msg:"插入成功"
       }
