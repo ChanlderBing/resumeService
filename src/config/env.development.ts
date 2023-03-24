@@ -1,5 +1,4 @@
 
-
 export default {
     // 服务基本配置
     SERVICE_CONFIG: {

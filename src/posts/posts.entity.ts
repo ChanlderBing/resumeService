@@ -75,7 +75,7 @@ export class workEntity {
     startTime: Date
     @Column({type: 'timestamp',nullable: true})
     endTime: Date
-    @Column()
+    @Column({nullable: true})
     sortIndex:number
 }
 
@@ -90,7 +90,7 @@ export class summaryEntity {
     @Column({nullable: true})
     richText: string;
     @Column({nullable: true})
-    modelIndex:number
+    sortIndex:number
 }
 
 @Entity("project")

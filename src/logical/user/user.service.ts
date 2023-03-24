@@ -30,7 +30,7 @@ export class UserService {
    * @param requestBody 请求体
    */
     async register(requestBody: any): Promise<any> {
-        const {  userName,password, repassword } = requestBody;
+        const { userName,password, repassword } = requestBody;
         if (password !== repassword) {
           return {
             code: 400,

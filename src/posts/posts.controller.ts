@@ -1,16 +1,16 @@
-import { PostsService,PostsRo } from "./posts.service";
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
+import { PostsService } from "./posts.service";
+import { Body, Controller, Get, Logger, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from "@nestjs/passport";
-import { Request } from 'express'
+import { inspect } from "util";
 
 @Controller('posts')
 export class PostsController {
     constructor(private readonly postsService:PostsService){}
 
-
     @UseGuards(AuthGuard('jwt'))
     @Post('setUserResume')
-    async setPerson(@Body() post,@Req() request){
+    async setUserResume(@Body() post,@Req() request){
+        Logger.log(`${inspect(request.user)}`)
         return await this.postsService.setUserResume(request.user.id,post)
     }
     
@@ -30,11 +30,21 @@ export class PostsController {
     async updateSchool(@Body() post,@Req() request){
         return await this.postsService.updateSchool(post)
     }
- 
+    @Post('setPerson')
+    async setPerson(@Body() post,@Req() request){
+        return await this.postsService.setPerson(10,post)
+    }
+    
+    @Post('setSchool')
+    async setSchool(@Body() post,@Req() request){
+        return await this.postsService.setSchool(10,post)
+    }
     @UseGuards(AuthGuard('jwt'))
     @Get('getUserResume')
     async getUserResume(@Body() get,@Req() request){
+        Logger.log(`${inspect(request.user.id)}`)
          await this.postsService.getUserResume(request.user.id)
     }
 }
+
 
