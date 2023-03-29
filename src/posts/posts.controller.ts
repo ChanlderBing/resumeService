@@ -42,8 +42,13 @@ export class PostsController {
     @UseGuards(AuthGuard('jwt'))
     @Get('getUserResume')
     async getUserResume(@Body() get,@Req() request){
-        Logger.log(`${inspect(request.user.id)}`)
-         await this.postsService.getUserResume(request.user.id)
+        return await this.postsService.getUserResume(request.user.id,1)
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('getUserResumeAll')
+    async getUserResumeAll(@Body() get,@Req() request){
+        return await this.postsService.getUserResumeAll(request.user.id)
     }
 }
 

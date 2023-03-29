@@ -23,11 +23,11 @@ export class PostsService {
 
 
   async updatePerson(post) {
-    const sqlToPerson = `update personal set userName =${post.userName},title=${post.title},
-    cityYoulived=${post.cityYoulived},degree=${post.degree},
-    email=${post.email},phoneNumber=${post.phoneNumber},
-    cityItent=${post.cityItent},currentStatus=${post.currentStatus},
-    postIntent=${post.postIntent} where id = ${post.id}`
+    const sqlToPerson = `update personal set userName ='${post.userName}',title='${post.title}',
+    cityYoulived='${post.cityYoulived}',degree='${post.degree}',
+    email='${post.email}',phoneNumber='${post.phoneNumber}',
+    cityItent='${post.cityItent}',currentStatus='${post.currentStatus}',
+    postIntent='${post.postIntent}' where id = ${post.id}`
     const data =  await this.postsRepository.query(sqlToPerson)
       return {
         msg:data
@@ -35,11 +35,11 @@ export class PostsService {
     }
 
   async updateWork(post) {
-    const sqlToWork = `update personal set title=${post.title},
-    experienceName=${post?.experienceName},role=${post.role},
-    department=${post.department},city=${post.city},
-    richText=${post.richText},startTime=${post.startTime},
-    endTime=${post.endTime}where id = ${post.id}`
+    const sqlToWork = `update personal set title='${post.title}',
+    experienceName='${post?.experienceName}',role='${post.role}',
+    department='${post.department}',city='${post.city}',
+    richText='${post.richText}',startTime='${post.startTime}',
+    endTime='${post.endTime}' where id = ${post.id}`
     const data =  await this.postsRepository.query(sqlToWork)
       return {
         msg:data
@@ -47,11 +47,11 @@ export class PostsService {
   }
 
   async updateSchool(post) {
-    const sqlToProject = `update project set title=${post.title},
-    academy=${post.academy},degree=${post.degree},
-    major=${post.major},school=${post.school},
-    richText=${post.richText},startTime=${post.startTime},
-    endTime=${post.endTime},sortIndex=${post.sortIndex}where id = ${post.id}`
+    const sqlToProject = `update project set title='${post.title}',
+    academy='${post.academy}',degree='${post.degree}',
+    major='${post.major}',school='${post.school}',
+    richText='${post.richText}',startTime='${post.startTime}',
+    endTime='${post.endTime}',sortIndex=${post.sortIndex} where id = ${post.id}`
     const data =  await this.postsRepository.query(sqlToProject)
       return {
         msg:data
@@ -59,10 +59,10 @@ export class PostsService {
     }
 
   async updateProject(post) {
-    const sqlToProject = `update personal set projectName=${post.projectName},
-    projectDescription=${post.projectDescription},city=${post.city},
-    startTime=${post.startTime},endTime=${post.endTime},
-    richText=${post.richText} where id = ${post.id}`
+    const sqlToProject = `update personal set projectName='${post.projectName}',
+    projectDescription='${post.projectDescription}',city='${post.city}',
+    startTime='${post.startTime}',endTime='${post.endTime}',
+    richText='${post.richText}' where id = ${post.id}`
     const data =  await this.postsRepository.query(sqlToProject)
       return {
         msg:data
@@ -70,9 +70,9 @@ export class PostsService {
     }
 
   async updateSummary(post) {
-    const sqlToSummary = `update summary set title=${post.title},
-    richText=${post.richText},startTime=${post.startTime},
-    endTime=${post.endTime} where id = ${post.id}`
+    const sqlToSummary = `update summary set title='${post.title}',
+    richText='${post.richText}',startTime='${post.startTime}',
+    endTime='${post.endTime}' where id = ${post.id}`
     const data =  await this.postsRepository.query(sqlToSummary)
       return {
         msg:data
@@ -87,23 +87,28 @@ export class PostsService {
           const sortId =  parseInt((await this.postsRepository.query(sqlToCheck))[0]["COUNT(*)"])+1
           const sqlToPerson = `insert into resume values(null,${userId},${sortId})`
           const insertId =  (await transactionRepository.query(sqlToPerson)).insertId
-          if (!insertId) {
+          const insertId1 = this.setPerson(insertId,post)
+          const insertId2 = this.setProject(insertId,null)
+          const insertId3 = this.setSchool(insertId,null)
+          const insertId4 = this.setSummary(insertId)
+          const insertId5 = this.setWork(insertId,null)
+          if (!sortId&&!insertId&&!insertId1&&!insertId2&&!insertId3&&!insertId4&&!insertId5) {
+            if (insertId) {
+              const removeResume = `DELETE FROM resume WHERE id = ${insertId}`
+              await this.postsRepository.query(removeResume)
+            }
             return {
               code:300,
               msg:'创建失败'
             }
-          }
-            this.setPerson(insertId,post)
-            this.setProject(insertId,null)
-            this.setSchool(insertId,null)
-            this.setSummary(insertId)
-            this.setWork(insertId,null)
+          }else{
           return {
+            insertId:insertId,
             code:200,
             msg:'创建成功'
           }
           }
-            
+        } 
         );
         return addRes;
     } catch (error) {
@@ -114,15 +119,14 @@ export class PostsService {
   }
 
   async setPerson(resumeId,post) {
-    const sqlToPerson = `insert into personal values(null,${resumeId},${post.userName},${post.title},${post.cityYoulived},${post.degree},${post.email},${post.phoneNumber},${post.cityItent},${post.currentStatus},${post.postIntent})`
+    const sqlToPerson = `insert into personal values(null,'${post.userName}','${post.title}','${post.cityYoulived}','${post.degree}','${post.email}','${post.phoneNumber}','${post.cityItent}','${post.currentStatus}','${post.postIntent}',${resumeId})`
     return  await this.postsRepository.query(sqlToPerson)
-    
   }
         
   async setProject(resumeId,post) {
     if (post&&Object.keys(post).length !== 0) {
       const sqlToProject = `insert into project
-          values(null,${post.resumemodelId}${post.projectName},${post.projectDescription},${post.city},${post.startTime},${post.endTime},${post.richText},${post.modelIndex},${post.sortIndex})`
+          values(null,${post.resumemodelId},'${post.projectName}','${post.projectDescription}','${post.city}','${post.startTime}','${post.endTime}','${post.richText}','${post.modelIndex}',${post.sortIndex})`
       return await this.postsRepository.query(sqlToProject)
     }else{
       try {
@@ -145,7 +149,7 @@ export class PostsService {
   async setWork(resumeId,post) {
     let data;
     if (post&&Object.keys(post).length !== 0) {
-      const sqlToWork = `insert into work values(null,${post.resumemodelId},${post.title},${post.experienceName},${post.role},${post.department},${post.city},${post.richText},${post.startTime},${post.endTime},${post.sortIndex})`
+      const sqlToWork = `insert into work values(null,${post.resumemodelId},'${post.title}','${post.experienceName}','${post.role}','${post.department}','${post.city}','${post.richText}','${post.startTime}','${post.endTime}',${post.sortIndex})`
       data =  await this.postsRepository.query(sqlToWork)
     }else{
       try {
@@ -169,7 +173,7 @@ export class PostsService {
   async setSchool(resumeId,post) {
     if (post&&Object.keys(post).length !== 0) {
       try {
-        const sqlToSchool = `insert into school values(null,${post.resumemodelId},${post.title},${post.academy},${post.degree},${post.major},${post.school},${post.richText},${post.startTime},${post.endTime},${post.sortIndex})`
+        const sqlToSchool = `insert into school values(null,${post.resumemodelId},'${post.title}','${post.academy}','${post.degree}','${post.major}','${post.school}','${post.richText}','${post.startTime}','${post.endTime}',${post.sortIndex})`
         return await this.postsRepository.query(sqlToSchool)
       } catch (error) {
         throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -184,7 +188,7 @@ export class PostsService {
             return await transactionRepository.query(sqlToSchool)
             }   
           );
-          return addRes;
+        return addRes;
       } catch (error) {
           console.log("Transaction failed:", error);
           throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -200,7 +204,7 @@ export class PostsService {
         const  resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
         const sqlToSummary  = `insert into summary(id,resumemodelId) values(null,${resumemodelId})`
         return  await transactionRepository.query(sqlToSummary)
-          }   
+        }   
         );
         return addRes;
     } catch (error) {
@@ -209,7 +213,7 @@ export class PostsService {
     }
   } 
   async getUserResume(userId:number=10,sortId:number=1) {
-    return{
+    return {
       personalMoudle:{
         ...await this.getPerson(userId,sortId)
       },
@@ -230,8 +234,17 @@ export class PostsService {
       ]
     }
   }
+  async getUserResumeAll(userId:number=10) {
+    const sqlToPerson = `select * from personal where resumeId in(select id from resume where userId = ${userId}) `
+    const data =  await this.postsRepository.query(sqlToPerson)
+    return {
+      data,
+      code:200,
+      msg:'获取成功'
+    }
+  }
   async getPerson(userId:number=10,sortId:number=1) {
-    const sqlToPerson = `select * from personal where resumeId =(select id from resume where userId = ${userId} and sortId = ${sortId})`
+    const sqlToPerson = `select * from personal where resumeId =(select id from resume where userId = ${userId} and sortId = ${sortId}) `
     const data =  (await this.postsRepository.query(sqlToPerson))[0]
       return {
         inputList:[{
@@ -249,8 +262,8 @@ export class PostsService {
       }
     }
   async getSchool(userId:number=10,sortId:number=1) {
-    const sqlToSchool = `select * from project where resumemodelId = (select id from resumemodel where 
-      resumemodel.resumeId =(select id from resume where userId = ${userId} and sortId = ${sortId}))`
+    const sqlToSchool = `select * from project where resumemodelId in (select id from resumemodel where 
+      resumemodel.resumeId =(select id from resume where userId = ${userId} and sortId = ${sortId})and modelIndex = 0)`
       const data =  await this.postsRepository.query(sqlToSchool)
       return {
         expand:true,
@@ -259,8 +272,8 @@ export class PostsService {
       }
     }
   async getWork(userId:number=10,sortId:number=1) {
-    const sqlToWork = `select * from project where resumemodelId = (select id from resumemodel where 
-      resumemodel.resumeId =(select id from resume where userId = ${userId} and sortId = ${sortId}))`
+    const sqlToWork = `select * from project where resumemodelId in (select id from resumemodel where 
+      resumemodel.resumeId =(select id from resume where userId = ${userId} and sortId = ${sortId}) and modelIndex = 1)`
       const data =  await this.postsRepository.query(sqlToWork)
       return {
         expand:true,
@@ -270,7 +283,7 @@ export class PostsService {
     }
   async getSummary(userId:number=10,sortId:number=1) {
     const sqlToSummary = `select * from project where resumemodelId = (select id from resumemodel where 
-        resumemodel.resumeId =(select id from resume where userId =${userId} and sortId = ${sortId}))`
+        resumeId =(select id from resume where userId =${userId} and sortId = ${sortId}) and modelIndex = 3)`
         const data = await this.postsRepository.query(sqlToSummary)
       return {
         expand:true,
@@ -279,8 +292,8 @@ export class PostsService {
       }
     }
   async getProject(userId:number=10,sortId:number=1) {
-    const sqlToProject = `select * from project where resumemodelId = (select id from resumemodel where 
-        resumemodel.resumeId =(select id from resume where userId =${userId} and sortId = ${sortId}))`
+    const sqlToProject = `select * from project where resumemodelId in (select id from resumemodel where 
+        resumeId =(select id from resume where userId =${userId} and sortId = ${sortId}) and modelIndex = 2)`
     const data =  await this.postsRepository.query(sqlToProject)
       return {
         expand:true,
