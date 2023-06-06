@@ -1,7 +1,8 @@
 import { PostsService } from "./posts.service";
-import { Body, Controller, Get, Logger, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from "@nestjs/passport";
 import { inspect } from "util";
+import { query } from "express";
 
 @Controller('posts')
 export class PostsController {
@@ -41,14 +42,19 @@ export class PostsController {
     }
     @UseGuards(AuthGuard('jwt'))
     @Get('getUserResume')
-    async getUserResume(@Body() get,@Req() request){
-        return await this.postsService.getUserResume(request.user.id,1)
+    async getUserResume(@Query('resumeId') resumeId){
+        return await this.postsService.getUserResume(resumeId)
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('getUserResumeAll')
-    async getUserResumeAll(@Body() get,@Req() request){
+    async getUserResumeAll(@Req() request){
         return await this.postsService.getUserResumeAll(request.user.id)
+    }
+
+    @Get('getUserResumeOne')
+    async getUserResumeOne(){
+        return await this.postsService.getUserResumeOne()
     }
 }
 
