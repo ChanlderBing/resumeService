@@ -11,7 +11,6 @@ export class PostsController {
     @UseGuards(AuthGuard('jwt'))
     @Post('setUserResume')
     async setUserResume(@Body() post,@Req() request){
-        Logger.log(`${inspect(request.user)}`)
         return await this.postsService.setUserResume(request.user.id,post)
     }
     
@@ -45,6 +44,11 @@ export class PostsController {
     async getUserResume(@Query('resumeId') resumeId){
         return await this.postsService.getUserResume(resumeId)
     }
+    @UseGuards(AuthGuard('jwt'))
+    @Get('ResumeInitByJWT')
+    async ResumeInit(@Req() request){
+        return await this.postsService.ResumeInit(request.user.id)
+    }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('getUserResumeAll')
@@ -55,6 +59,11 @@ export class PostsController {
     @Get('getUserResumeOne')
     async getUserResumeOne(){
         return await this.postsService.getUserResumeOne()
+    }
+
+    @Get('getResumeInit')
+    async getResumeInit(){
+        return await this.postsService.ResumeInit(8)
     }
 }
 

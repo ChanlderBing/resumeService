@@ -211,7 +211,8 @@ export class PostsService {
         console.log("Transaction failed:", error);
         throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  } 
+  }
+  
   async getUserResume(resumeId:number) {
     return {
       personalMoudle:{
@@ -233,6 +234,15 @@ export class PostsService {
       }
       ]
     }
+  }
+  async ResumeInit(userId:number) {
+    const sqlToPerson = `select * from personal where resumeId in (select id from resume where userId = ${userId}) `
+    const data1 =  await this.postsRepository.query(sqlToPerson)
+   
+    const data = await this.getUserResume(data1[0].resumeId)
+    Logger.log(`${inspect(data)}`)
+    return data
+  
   }
   async getUserResumeAll(userId:number) {
     const sqlToPerson = `select * from personal where resumeId in(select id from resume where userId = ${userId}) `
@@ -335,9 +345,10 @@ export class PostsService {
       }
     }
   async getSchool(resumeId:number) {
-    const sqlToSchool = `select * from school where resumemodelId in (select id from resumemodel where 
+    const sqlToSchool = `select academy, degree, major, school, period,richText from school where resumemodelId in (select id from resumemodel where 
      resumeId = ${resumeId} and modelIndex = 0)`
       const data =  await this.postsRepository.query(sqlToSchool)
+      Logger.log(`${inspect(data)}`)
       return {
         expand:true,
         inputList:data,
@@ -346,7 +357,7 @@ export class PostsService {
       }
     }
   async getWork(resumeId:number) {
-    const sqlToWork = `select * from work where resumemodelId in (select id from resumemodel where 
+    const sqlToWork = `select  * from work where resumemodelId in (select id from resumemodel where 
       resumeId = ${resumeId} and modelIndex = 1)`
       const data =  await this.postsRepository.query(sqlToWork)
       return {

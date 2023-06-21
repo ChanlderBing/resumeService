@@ -46,9 +46,7 @@ export class schoolEntity {
     @Column({nullable: true})
     richText: string;
     @Column({type: 'timestamp',nullable: true})
-    startTime: Date
-    @Column({type: 'timestamp',nullable: true})
-    endTime: Date
+    period: Date
     @Column({nullable: true})
     sortIndex:number
 }
@@ -72,9 +70,7 @@ export class workEntity {
     @Column({nullable: true})
     richText: string;
     @Column({type: 'timestamp',nullable: true})
-    startTime: Date
-    @Column({type: 'timestamp',nullable: true})
-    endTime: Date
+    period: Date
     @Column({nullable: true})
     sortIndex:number
 }
@@ -106,9 +102,7 @@ export class projectEntity {
     @Column({nullable: true})
     city: string;
     @Column({type: 'timestamp',nullable: true})
-    startTime: Date
-    @Column({type: 'timestamp',nullable: true})
-    endTime: Date
+    period: Date
     @Column({nullable: true})
     richText: string;
     @Column({nullable: true})
