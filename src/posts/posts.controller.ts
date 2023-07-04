@@ -13,22 +13,35 @@ export class PostsController {
     async setUserResume(@Body() post,@Req() request){
         return await this.postsService.setUserResume(request.user.id,post)
     }
-    
+    @UseGuards(AuthGuard('jwt'))
     @Post('updatePerson')
     async updatePerson(@Body() post,@Req() request){
         return await this.postsService.updatePerson(post)
     }
+    @UseGuards(AuthGuard('jwt'))
     @Post('updateProject')
     async updateProject(@Body() post,@Req() request){
         return await this.postsService.updateProject(post)
     }
+    @UseGuards(AuthGuard('jwt'))
     @Post('updateWork')
     async updateWork(@Body() post,@Req() request){
         return await this.postsService.updateWork(post)
     }
+    @UseGuards(AuthGuard('jwt'))
     @Post('updateSchool')
     async updateSchool(@Body() post,@Req() request){
         return await this.postsService.updateSchool(post)
+    }
+    @UseGuards(AuthGuard('jwt'))
+    @Post('updateSummary')
+    async updateSummary(@Body() post,@Req() request){
+        return await this.postsService.updateSummary(post)
+    }
+    @UseGuards(AuthGuard('jwt'))
+    @Post('updateResumeName')
+    async updateResumeName(@Body() post){
+        return await this.postsService.updateResumeName(post)
     }
     @Post('setPerson')
     async setPerson(@Body() post,@Req() request){
@@ -61,6 +74,10 @@ export class PostsController {
         return await this.postsService.getUserResumeOne()
     }
 
+    @Get('getResumeInit')
+    async getResumeInit(){
+        return await this.postsService.ResumeInit(8)
+    }
     @Get('getResumeInit')
     async getResumeInit(){
         return await this.postsService.ResumeInit(8)

@@ -25,7 +25,10 @@ export class personalEntity {
     currentStatus: string;
     @Column({nullable: true})
     postIntent: string;
-
+    @Column({nullable: true,default: '未命名简历'})
+    resumeName: string;
+    @Column({nullable: true,default: false})
+    editActive: boolean;
 }
 @Entity("school")
 export class schoolEntity {
@@ -43,10 +46,10 @@ export class schoolEntity {
     major: string;
     @Column({nullable: true})
     school: string;
-    @Column({nullable: true})
+    @Column({nullable: true,length:10000})
     richText: string;
-    @Column({type: 'timestamp',nullable: true})
-    period: Date
+    @Column({nullable: true})
+    period:string
     @Column({nullable: true})
     sortIndex:number
 }
@@ -67,10 +70,10 @@ export class workEntity {
     department: string;
     @Column({nullable: true})
     city: string;
-    @Column({nullable: true})
+    @Column({nullable: true,length:10000})
     richText: string;
-    @Column({type: 'timestamp',nullable: true})
-    period: Date
+    @Column({nullable: true})
+    period:string
     @Column({nullable: true})
     sortIndex:number
 }
@@ -83,7 +86,7 @@ export class summaryEntity {
     resumemodelId: number;
     @Column({nullable: true})
     title: string;
-    @Column({nullable: true})
+    @Column({nullable: true,length:10000})
     richText: string;
     @Column({nullable: true})
     sortIndex:number
@@ -101,9 +104,9 @@ export class projectEntity {
     projectDescription: string;
     @Column({nullable: true})
     city: string;
-    @Column({type: 'timestamp',nullable: true})
-    period: Date
     @Column({nullable: true})
+    period:string
+    @Column({nullable: true,length:10000})
     richText: string;
     @Column({nullable: true})
     sortIndex:number
@@ -115,6 +118,8 @@ export class resumeEntity {
 
     @Column()
     userId: number;
+
+
 
     @Column()
     sortId:number

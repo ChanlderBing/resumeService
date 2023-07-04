@@ -35,11 +35,10 @@ export class PostsService {
     }
 
   async updateWork(post) {
-    const sqlToWork = `update personal set title='${post.title}',
+    const sqlToWork = `update work set 
     experienceName='${post?.experienceName}',role='${post.role}',
     department='${post.department}',city='${post.city}',
-    richText='${post.richText}',startTime='${post.startTime}',
-    endTime='${post.endTime}' where id = ${post.id}`
+    richText='${post.richText}',period='${post.period}' where id = ${post.id}`
     const data =  await this.postsRepository.query(sqlToWork)
       return {
         msg:data
@@ -47,21 +46,27 @@ export class PostsService {
   }
 
   async updateSchool(post) {
-    const sqlToProject = `update project set title='${post.title}',
+    const sqlToProject = `update school set 
     academy='${post.academy}',degree='${post.degree}',
     major='${post.major}',school='${post.school}',
-    richText='${post.richText}',startTime='${post.startTime}',
-    endTime='${post.endTime}',sortIndex=${post.sortIndex} where id = ${post.id}`
+    richText='${post.richText}',period='${post.period}' where id = ${post.id}`
     const data =  await this.postsRepository.query(sqlToProject)
       return {
         msg:data
       }
     }
-
+  async updateResumeName(post) {
+    const sqlToProject = `update personal set resumeName='${post.resumeName}' where resumeId = ${post.resumeId}`
+    const data =  await this.postsRepository.query(sqlToProject)
+      return {
+        msg:data
+      }
+  }
   async updateProject(post) {
-    const sqlToProject = `update personal set projectName='${post.projectName}',
+    Logger.log(`${inspect(post)}`)
+    const sqlToProject = `update project set projectName='${post.projectName}',
     projectDescription='${post.projectDescription}',city='${post.city}',
-    startTime='${post.startTime}',endTime='${post.endTime}',
+    period='${post.period}',
     richText='${post.richText}' where id = ${post.id}`
     const data =  await this.postsRepository.query(sqlToProject)
       return {
@@ -70,9 +75,8 @@ export class PostsService {
     }
 
   async updateSummary(post) {
-    const sqlToSummary = `update summary set title='${post.title}',
-    richText='${post.richText}',startTime='${post.startTime}',
-    endTime='${post.endTime}' where id = ${post.id}`
+    const sqlToSummary = `update summary set
+    richText='${post.richText}' where id = ${post.id}`
     const data =  await this.postsRepository.query(sqlToSummary)
       return {
         msg:data
@@ -215,6 +219,7 @@ export class PostsService {
   
   async getUserResume(resumeId:number) {
     return {
+      resumeId:resumeId,
       personalMoudle:{
         ...await this.getPerson(resumeId)
       },
@@ -238,9 +243,7 @@ export class PostsService {
   async ResumeInit(userId:number) {
     const sqlToPerson = `select * from personal where resumeId in (select id from resume where userId = ${userId}) `
     const data1 =  await this.postsRepository.query(sqlToPerson)
-   
     const data = await this.getUserResume(data1[0].resumeId)
-    Logger.log(`${inspect(data)}`)
     return data
   
   }
@@ -262,7 +265,8 @@ export class PostsService {
       msg:'获取成功'
     }
   }
-  
+
+
   // async getPerson(userId:number=10,sortId:number=1) {
   //   const sqlToPerson = `select * from personal where resumeId = (select id from resume where userId = ${userId} and sortId = ${sortId}) `
   //   const data =  (await this.postsRepository.query(sqlToPerson))[0]
@@ -341,11 +345,12 @@ export class PostsService {
           postIntent:data?.postIntent
         }],
         title:"基本信息",
-        userName:data?.userName
+        userName:data?.userName,
+        resumeName:data.resumeName
       }
     }
   async getSchool(resumeId:number) {
-    const sqlToSchool = `select academy, degree, major, school, period,richText from school where resumemodelId in (select id from resumemodel where 
+    const sqlToSchool = `select id, academy, degree, major, school, period,richText from school where resumemodelId in (select id from resumemodel where 
      resumeId = ${resumeId} and modelIndex = 0)`
       const data =  await this.postsRepository.query(sqlToSchool)
       Logger.log(`${inspect(data)}`)
@@ -353,7 +358,8 @@ export class PostsService {
         expand:true,
         inputList:data,
         title:"教育经历",
-        isShow:true
+        isShow:true,
+        moudleId:0
       }
     }
   async getWork(resumeId:number) {
@@ -364,7 +370,8 @@ export class PostsService {
         expand:true,
         inputList:data,
         title:"工作经历",
-        isShow:true
+        isShow:true,
+        moudleId:1
       }
     }
   async getSummary(resumeId:number) {
@@ -375,7 +382,8 @@ export class PostsService {
         expand:true,
         inputList:data,
         title:"个人总结",
-        isShow:true
+        isShow:true,
+        moudleId:3
       }
     }
   async getProject(resumeId:number) {
@@ -386,7 +394,8 @@ export class PostsService {
         expand:true,
         inputList:data,
         title:"项目经历",
-        isShow:true
+        isShow:true,
+        moudleId:2
       }
   }
 }
