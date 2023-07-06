@@ -23,11 +23,10 @@ export class PostsService {
 
 
   async updatePerson(post) {
-    const sqlToPerson = `update personal set userName ='${post.userName}',title='${post.title}',
-    cityYoulived='${post.cityYoulived}',degree='${post.degree}',
+    const sqlToPerson = `update personal set userName ='${post.userName}',cityYoulived='${post.cityYoulived}',degree='${post.degree}',
     email='${post.email}',phoneNumber='${post.phoneNumber}',
     cityItent='${post.cityItent}',currentStatus='${post.currentStatus}',
-    postIntent='${post.postIntent}' where id = ${post.id}`
+    postIntent='${post.postIntent}' where resumeId = ${post.resumeId}`
     const data =  await this.postsRepository.query(sqlToPerson)
       return {
         msg:data
@@ -123,7 +122,7 @@ export class PostsService {
   }
 
   async setPerson(resumeId,post) {
-    const sqlToPerson = `insert into personal values(null,'${post.userName}','${post.title}','${post.cityYoulived}','${post.degree}','${post.email}','${post.phoneNumber}','${post.cityItent}','${post.currentStatus}','${post.postIntent}',${resumeId})`
+    const sqlToPerson = `insert into personal values(null,'${post.userName}','${post.title}','${post.cityYoulived}','${post.degree}','${post.email}','${post.phoneNumber}','${post.cityItent}','${post.currentStatus}','${post.postIntent}',${resumeId},'',0)`
     return  await this.postsRepository.query(sqlToPerson)
   }
         
@@ -265,7 +264,13 @@ export class PostsService {
       msg:'获取成功'
     }
   }
-
+  async getUserResumeName(resumeId) {
+    const sqlToPerson = `select resumeName from personal where resumeId =${resumeId}`
+    const data =  await this.postsRepository.query(sqlToPerson)
+    return data
+    
+  }
+ 
 
   // async getPerson(userId:number=10,sortId:number=1) {
   //   const sqlToPerson = `select * from personal where resumeId = (select id from resume where userId = ${userId} and sortId = ${sortId}) `
@@ -346,7 +351,8 @@ export class PostsService {
         }],
         title:"基本信息",
         userName:data?.userName,
-        resumeName:data.resumeName
+        resumeName:data.resumeName,
+        resumeId:resumeId
       }
     }
   async getSchool(resumeId:number) {

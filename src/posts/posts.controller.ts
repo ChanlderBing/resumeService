@@ -64,6 +64,12 @@ export class PostsController {
     }
 
     @UseGuards(AuthGuard('jwt'))
+    @Get('getUserResumeName')
+    async getUserResumeName(@Query('resumeId') resumeId){
+        return await this.postsService.getUserResumeName(resumeId)
+    }
+
+    @UseGuards(AuthGuard('jwt'))
     @Get('getUserResumeAll')
     async getUserResumeAll(@Req() request){
         return await this.postsService.getUserResumeAll(request.user.id)
@@ -74,10 +80,6 @@ export class PostsController {
         return await this.postsService.getUserResumeOne()
     }
 
-    @Get('getResumeInit')
-    async getResumeInit(){
-        return await this.postsService.ResumeInit(8)
-    }
     @Get('getResumeInit')
     async getResumeInit(){
         return await this.postsService.ResumeInit(8)
