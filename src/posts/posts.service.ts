@@ -1,9 +1,12 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { MulterModule } from '@nestjs/platform-express/multer/multer.module';
 import { InjectRepository } from '@nestjs/typeorm';
 import { userEntity } from 'src/logical/user/user.entity';
 import {  DataSource, Repository } from 'typeorm';
 import { inspect } from 'util';
 import { env } from '../config';
+const multiparty = require('multiparty');
+
 
 
 export interface PostsRo {
@@ -128,8 +131,7 @@ export class PostsService {
         
   async setProject(resumeId,post) {
     if (post&&Object.keys(post).length !== 0) {
-      const sqlToProject = `insert into project
-          values(null,${post.resumemodelId},'${post.projectName}','${post.projectDescription}','${post.city}','${post.startTime}','${post.endTime}','${post.richText}','${post.modelIndex}',${post.sortIndex})`
+      const sqlToProject = `insert into project values(null,'${post.projectName}','${post.projectDescription}','${post.city}',${post.resumemodelId},0,'${post.period}','${post.richText}')`
       return await this.postsRepository.query(sqlToProject)
     }else{
       try {
@@ -152,7 +154,7 @@ export class PostsService {
   async setWork(resumeId,post) {
     let data;
     if (post&&Object.keys(post).length !== 0) {
-      const sqlToWork = `insert into work values(null,${post.resumemodelId},'${post.title}','${post.experienceName}','${post.role}','${post.department}','${post.city}','${post.richText}','${post.startTime}','${post.endTime}',${post.sortIndex})`
+      const sqlToWork = `insert into work values(null,'0','${post.experienceName}','${post.role}','${post.department}','${post.city}','${post.resumemodelId}',0,'${post.period}','${post.richText}')`
       data =  await this.postsRepository.query(sqlToWork)
     }else{
       try {
@@ -176,7 +178,7 @@ export class PostsService {
   async setSchool(resumeId,post) {
     if (post&&Object.keys(post).length !== 0) {
       try {
-        const sqlToSchool = `insert into school values(null,${post.resumemodelId},'${post.title}','${post.academy}','${post.degree}','${post.major}','${post.school}','${post.richText}','${post.startTime}','${post.endTime}',${post.sortIndex})`
+        const sqlToSchool = `insert into school values(null,'0','${post.academy}','${post.degree}','${post.major}','${post.school}',${post.resumemodelId},0,'${post.period}','${post.richText}')`
         return await this.postsRepository.query(sqlToSchool)
       } catch (error) {
         throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -198,7 +200,7 @@ export class PostsService {
       }
     }
   }
-
+  
   async setSummary(resumeId) {
     try {
       const addRes = await this.postsRepository.manager.transaction(
@@ -207,13 +209,20 @@ export class PostsService {
         const  resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
         const sqlToSummary  = `insert into summary(id,resumemodelId) values(null,${resumemodelId})`
         return  await transactionRepository.query(sqlToSummary)
-        }   
-        );
-        return addRes;
+        })
+        return addRes
     } catch (error) {
         console.log("Transaction failed:", error);
         throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+  async updatePic(post,request) {
+    var form = new multiparty.Form();
+    form.uploadDir='upload_img'; //上传图片保存的地址 目录必须存在
+    form.parse(request, (err, fields, files)=> {
+        console.log(fields.resumeId);//获取表单的数据
+         console.log(files);//图片上传成功返回的信息
+    })
   }
   
   async getUserResume(resumeId:number) {
@@ -356,7 +365,7 @@ export class PostsService {
       }
     }
   async getSchool(resumeId:number) {
-    const sqlToSchool = `select id, academy, degree, major, school, period,richText from school where resumemodelId in (select id from resumemodel where 
+    const sqlToSchool = `select id, academy, degree, major, school, period,richText,resumemodelId from school where resumemodelId in (select id from resumemodel where 
      resumeId = ${resumeId} and modelIndex = 0)`
       const data =  await this.postsRepository.query(sqlToSchool)
       Logger.log(`${inspect(data)}`)

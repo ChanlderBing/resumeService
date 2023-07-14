@@ -7,6 +7,9 @@ import { UserService } from 'src/logical/user/user.service';
 import { userEntity } from 'src/logical/user/user.entity';
 import { personalmodelEntity } from 'src/entyties/personalModel.entity';
 import { resumemodelEntity } from 'src/entyties/personModel.entity';
+import { MulterModule } from '@nestjs/platform-express';
+import path from 'path';
+import { diskStorage } from 'multer';
 
 
 @Module({
@@ -19,7 +22,7 @@ import { resumemodelEntity } from 'src/entyties/personModel.entity';
   TypeOrmModule.forFeature([workEntity]),
   TypeOrmModule.forFeature([schoolEntity]),
   TypeOrmModule.forFeature([summaryEntity]),
-  TypeOrmModule.forFeature([projectEntity])],
+  TypeOrmModule.forFeature([projectEntity]),],
   controllers: [PostsController],
   providers: [PostsService,UserService]
 })

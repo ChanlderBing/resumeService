@@ -1,8 +1,9 @@
 import { PostsService } from "./posts.service";
-import { Body, Controller, Get, Logger, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from "@nestjs/passport";
 import { inspect } from "util";
 import { query } from "express";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller('posts')
 export class PostsController {
@@ -43,11 +44,28 @@ export class PostsController {
     async updateResumeName(@Body() post){
         return await this.postsService.updateResumeName(post)
     }
+   
+    @UseGuards(AuthGuard('jwt'))
+    @Post('updatePic')
+    async updatePic(@Body() post,@Req() request){
+        return await this.postsService.updatePic(post,request)
+    }
+    @UseGuards(AuthGuard('jwt'))
     @Post('setPerson')
     async setPerson(@Body() post,@Req() request){
-        return await this.postsService.setPerson(10,post)
+        return await this.postsService.setPerson(null,post)
     }
-    
+    @UseGuards(AuthGuard('jwt'))
+    @Post('setWork')
+    async setWork(@Body() post,@Req() request){
+        return await this.postsService.setWork(null,post)
+    }
+    @UseGuards(AuthGuard('jwt'))
+    @Post('setProject')
+    async setProject(@Body() post,@Req() request){
+        return await this.postsService.setProject(null,post)
+    }
+    @UseGuards(AuthGuard('jwt'))
     @Post('setSchool')
     async setSchool(@Body() post,@Req() request){
         return await this.postsService.setSchool(10,post)
