@@ -29,6 +29,9 @@ export class personalEntity {
     resumeName: string;
     @Column({nullable: true,default: false})
     editActive: boolean;
+    @Column({nullable: true})
+    avatar: string;
+    
 }
 @Entity("school")
 export class schoolEntity {

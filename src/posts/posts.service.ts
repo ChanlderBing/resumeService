@@ -19,11 +19,6 @@ export class PostsService {
         private readonly postsRepository: Repository<userEntity>,
         
       ) {}
-      // 创建文章
-  // async create(post: Partial<userEntity>): Promise<userEntity> {
-  //   return await this.postsRepository.save(post);
-  // }
-
 
   async updatePerson(post) {
     const sqlToPerson = `update personal set userName ='${post.userName}',cityYoulived='${post.cityYoulived}',degree='${post.degree}',
@@ -125,7 +120,7 @@ export class PostsService {
   }
 
   async setPerson(resumeId,post) {
-    const sqlToPerson = `insert into personal values(null,'${post.userName}','${post.title}','${post.cityYoulived}','${post.degree}','${post.email}','${post.phoneNumber}','${post.cityItent}','${post.currentStatus}','${post.postIntent}',${resumeId},'',0)`
+    const sqlToPerson = `insert into personal values(null,'${post.userName}','${post.title}','${post.cityYoulived}','${post.degree}','${post.email}','${post.phoneNumber}','${post.cityItent}','${post.currentStatus}','${post.postIntent}',${resumeId},'',0,null)`
     return  await this.postsRepository.query(sqlToPerson)
   }
         
@@ -218,10 +213,11 @@ export class PostsService {
   }
   async updatePic(post,request) {
     var form = new multiparty.Form();
-    form.uploadDir='upload_img'; //上传图片保存的地址 目录必须存在
-    form.parse(request, (err, fields, files)=> {
-        console.log(fields.resumeId);//获取表单的数据
-         console.log(files);//图片上传成功返回的信息
+    form.uploadDir='./public/upload_img'; //上传图片保存的地址 目录必须存在
+    form.parse(request, async (err, fields, files)=> {
+      let url = 'http://10.9.45.73:3000/' + files.file[0].path.split('\\')[1]+'/'+files.file[0].path.split('\\')[2]
+      const sqlToProject = `update personal set avatar='${url}' where resumeId = ${fields.resumeId[0]}`
+      const data =  await this.postsRepository.query(sqlToProject)
     })
   }
   
@@ -361,7 +357,8 @@ export class PostsService {
         title:"基本信息",
         userName:data?.userName,
         resumeName:data.resumeName,
-        resumeId:resumeId
+        resumeId:resumeId,
+        avatar:data?.avatar
       }
     }
   async getSchool(resumeId:number) {
