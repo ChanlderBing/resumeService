@@ -100,7 +100,7 @@ export class PostsController {
 
     @Get('getResumeInit')
     async getResumeInit(){
-        return await this.postsService.ResumeInit(8)
+        return await this.postsService.ResumeInit(16)
     }
 }
 

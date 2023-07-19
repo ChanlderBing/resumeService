@@ -5,6 +5,7 @@ import { userEntity } from 'src/logical/user/user.entity';
 import {  DataSource, Repository } from 'typeorm';
 import { inspect } from 'util';
 import { env } from '../config';
+import { unlink } from 'node:fs';
 const multiparty = require('multiparty');
 
 
@@ -215,9 +216,19 @@ export class PostsService {
     var form = new multiparty.Form();
     form.uploadDir='./public/upload_img'; //上传图片保存的地址 目录必须存在
     form.parse(request, async (err, fields, files)=> {
-      let url = 'http://10.9.45.73:3000/' + files.file[0].path.split('\\')[1]+'/'+files.file[0].path.split('\\')[2]
+     var originalFileName = files.file[0].originalFilename
+      if (originalFileName) {
+      let url = files.file[0].path.split('\\')[2]
+      const sqlToProject1 = `select avatar from personal where resumeId = ${fields.resumeId[0]}`
+      const fileName =  (await this.postsRepository.query(sqlToProject1))[0].avatar
+      if (fileName) {
+      unlink(`./public/upload_img/${fileName}`,(err)=>{
+        if (err) console.log(err);
+      })}
       const sqlToProject = `update personal set avatar='${url}' where resumeId = ${fields.resumeId[0]}`
       const data =  await this.postsRepository.query(sqlToProject)
+      }
+      
     })
   }
   
@@ -228,12 +239,11 @@ export class PostsService {
         ...await this.getPerson(resumeId)
       },
       resumeMoudle:[{
-        ...await this.getProject(resumeId)
-      },
-        {
         ...await this.getSchool(resumeId)
       }
-      ,
+      ,{
+        ...await this.getProject(resumeId)
+      },
         {
         ...await this.getSummary(resumeId)
       }
@@ -261,7 +271,7 @@ export class PostsService {
     }
   }
   async getUserResumeOne() {
-    const sqlToPerson = `select * from personal where resumeId in(select id from resume where userId = 10) `
+    const sqlToPerson = `select * from personal where resumeId =49 `
     const data =  await this.postsRepository.query(sqlToPerson)
     return {
       data,
@@ -391,7 +401,7 @@ export class PostsService {
         resumeId = ${resumeId} and modelIndex = 3)`
         const data = await this.postsRepository.query(sqlToSummary)
       return {
-        expand:true,
+        expand:false,
         inputList:data,
         title:"个人总结",
         isShow:true,
