@@ -44,7 +44,12 @@ export class PostsController {
     async updateResumeName(@Body() post){
         return await this.postsService.updateResumeName(post)
     }
-   
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('updateShowStatus')
+    async updateShowStatus(@Body() post){
+        return await this.postsService.updateShowStatus(post)
+    }
     @UseGuards(AuthGuard('jwt'))
     @Post('updatePic')
     async updatePic(@Body() post,@Req() request){

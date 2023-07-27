@@ -55,6 +55,8 @@ export class schoolEntity {
     period:string
     @Column({nullable: true})
     sortIndex:number
+    @Column()
+    isShow:Boolean
 }
 
 @Entity("work")
@@ -79,6 +81,8 @@ export class workEntity {
     period:string
     @Column({nullable: true})
     sortIndex:number
+    @Column()
+    isShow:Boolean
 }
 
 @Entity("summary")
@@ -93,6 +97,8 @@ export class summaryEntity {
     richText: string;
     @Column({nullable: true})
     sortIndex:number
+    @Column()
+    isShow:Boolean
 }
 
 @Entity("project")
@@ -113,20 +119,17 @@ export class projectEntity {
     richText: string;
     @Column({nullable: true})
     sortIndex:number
+    @Column()
+    isShow:Boolean
 }
 @Entity("resume")
 export class resumeEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
-
     @Column()
     userId: number;
-
-
-
     @Column()
     sortId:number
-    
 }
 
 

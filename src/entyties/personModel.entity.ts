@@ -13,21 +13,9 @@ export class resumemodelEntity {
 
     @Column()
     modelIndex:number
-    // @OneToOne(type =>resumeEntity, resume => resume)
-    // @JoinColumn()
-    // resume: resumeEntity;
 
-    // @OneToOne(type =>schoolmodelEntity, info => info.user)
-    // school: schoolmodelEntity;
-
-    // @OneToOne(type =>workmodelEntity, info => info.user)
-    // work: workmodelEntity;
-
-    // @OneToOne(type =>projectmodelEntity, info => info.user)
-    // project: projectmodelEntity;
-
-    // @OneToOne(type =>summarymodelEntity, info => info.user)
-    // summary: summarymodelEntity;
+    @Column()
+    moudleIndex:number
 }
 // @Entity("schoolmodel")
 // export class schoolmodelEntity {

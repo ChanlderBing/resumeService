@@ -231,27 +231,32 @@ export class PostsService {
       
     })
   }
-  
+  sortab(data){
+      return  function(obj1,obj2){
+          var value1=obj1[data];
+          var value2=obj2[data];
+          if(value2<value1){
+             return 1
+          }else if(value2>value1){
+            return -1
+          }else{
+           return 0
+          }
+       }
+   }
   async getUserResume(resumeId:number) {
+    let school = await this.getSchool(resumeId)
+    let project = await this.getProject(resumeId)
+    let summary = await this.getSummary(resumeId)
+    let work = await this.getWork(resumeId)
+    let arr = [school,project,summary,work]
+    arr.sort(this.sortab("moudleId"))
     return {
       resumeId:resumeId,
       personalMoudle:{
         ...await this.getPerson(resumeId)
       },
-      resumeMoudle:[{
-        ...await this.getSchool(resumeId)
-      }
-      ,{
-        ...await this.getProject(resumeId)
-      },
-        {
-        ...await this.getSummary(resumeId)
-      }
-      ,
-        {
-        ...await this.getWork(resumeId)
-      }
-      ]
+      resumeMoudle:arr
     }
   }
   async ResumeInit(userId:number) {
@@ -259,7 +264,6 @@ export class PostsService {
     const data1 =  await this.postsRepository.query(sqlToPerson)
     const data = await this.getUserResume(data1[0].resumeId)
     return data
-  
   }
   async getUserResumeAll(userId:number) {
     const sqlToPerson = `select * from personal where resumeId in(select id from resume where userId = ${userId}) `
@@ -285,70 +289,21 @@ export class PostsService {
     return data
     
   }
- 
-
-  // async getPerson(userId:number=10,sortId:number=1) {
-  //   const sqlToPerson = `select * from personal where resumeId = (select id from resume where userId = ${userId} and sortId = ${sortId}) `
-  //   const data =  (await this.postsRepository.query(sqlToPerson))[0]
-  //     return {
-  //       inputList:[{
-  //         cityYoulived:data.cityYoulived,
-  //         degree:data.degree,
-  //         email:data.email,
-  //         phoneNumber:data.phoneNumber,
-  //       },{
-  //         cityItent:data.cityItent,
-  //         currentStatus:data.currentStatus,
-  //         postIntent:data.postIntent
-  //       }],
-  //       title:"基本信息",
-  //       userName:data.userName
-  //     }
-  //   }
-  // async getSchool(userId:number=10,sortId:number=1) {
-  //   const sqlToSchool = `select * from project where resumemodelId in (select id from resumemodel where 
-  //     resumemodel.resumeId =(select id from resume where userId = ${userId} and sortId = ${sortId})and modelIndex = 0)`
-  //     const data =  await this.postsRepository.query(sqlToSchool)
-  //     return {
-  //       expand:true,
-  //       inputList:data,
-  //       title:"教育经历",
-  //       isShow:true
-  //     }
-  //   }
-  // async getWork(userId:number=10,sortId:number=1) {
-  //   const sqlToWork = `select * from project where resumemodelId in (select id from resumemodel where 
-  //     resumemodel.resumeId =(select id from resume where userId = ${userId} and sortId = ${sortId}) and modelIndex = 1)`
-  //     const data =  await this.postsRepository.query(sqlToWork)
-  //     return {
-  //       expand:true,
-  //       inputList:data,
-  //       title:"工作经历",
-  //       isShow:true
-  //     }
-  //   }
-  // async getSummary(userId:number=10,sortId:number=1) {
-  //   const sqlToSummary = `select * from project where resumemodelId = (select id from resumemodel where 
-  //       resumeId =(select id from resume where userId =${userId} and sortId = ${sortId}) and modelIndex = 3)`
-  //       const data = await this.postsRepository.query(sqlToSummary)
-  //     return {
-  //       expand:true,
-  //       inputList:data,
-  //       title:"个人总结",
-  //       isShow:true
-  //     }
-  //   }
-  // async getProject(userId:number=10,sortId:number=1) {
-  //   const sqlToProject = `select * from project where resumemodelId in (select id from resumemodel where 
-  //       resumeId =(select id from resume where userId =${userId} and sortId = ${sortId}) and modelIndex = 2)`
-  //   const data =  await this.postsRepository.query(sqlToProject)
-  //     return {
-  //       expand:true,
-  //       inputList:data,
-  //       title:"项目经历",
-  //       isShow:true
-  //     }
-  // }
+  async updateShowStatus(post) {
+    let sql
+    if (post.moudleId==0) {
+       sql = `update school set isShow=${post.status} where id = ${post.id}`
+    } else if (post.moudleId==1) {
+       sql = `update work set isShow=${post.status} where id = ${post.id}`
+    } else if(post.moudleId==2){
+       sql = `update project set isShow=${post.status} where id = ${post.id}`
+    }else if(post.moudleId==3){
+       sql = `update summary set isShow=${post.status} where id = ${post.id}`
+    }
+    const data =  await this.postsRepository.query(sql)
+    return data
+  }
+  
 
   async getPerson(resumeId:number) {
     const sqlToPerson = `select * from personal where resumeId = ${resumeId}`
@@ -372,7 +327,7 @@ export class PostsService {
       }
     }
   async getSchool(resumeId:number) {
-    const sqlToSchool = `select id, academy, degree, major, school, period,richText,resumemodelId from school where resumemodelId in (select id from resumemodel where 
+    const sqlToSchool = `select id, academy, degree, major, school, period,richText,resumemodelId,isShow from school where resumemodelId in (select id from resumemodel where 
      resumeId = ${resumeId} and modelIndex = 0)`
       const data =  await this.postsRepository.query(sqlToSchool)
       Logger.log(`${inspect(data)}`)
