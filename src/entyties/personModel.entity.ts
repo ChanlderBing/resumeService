@@ -10,12 +10,10 @@ export class resumemodelEntity {
     
     @Column()
     resumeId:number
-
     @Column()
     modelIndex:number
-
     @Column()
-    moudleIndex:number
+    moduleIndex:number
 }
 // @Entity("schoolmodel")
 // export class schoolmodelEntity {
