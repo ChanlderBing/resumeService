@@ -1,110 +1,138 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("personal")
 export class personalEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
     @Column()
-    userId: number;
+    resumeId:number
     @Column({length:20,nullable: true})
     userName: string;
-    @Column()
+    @Column({nullable: true})
     title: string;
-    @Column()
+    @Column({nullable: true})
     cityYoulived: string;
-    @Column()
+    @Column({nullable: true})
     degree: string;
-    @Column()
+    @Column({nullable: true})
     email: string;
-    @Column()
+    @Column({nullable: true})
     phoneNumber: string;
-    @Column()
+    @Column({nullable: true})
     cityItent: string;
-    @Column()
+    @Column({nullable: true})
     currentStatus: string;
-    @Column()
+    @Column({nullable: true})
     postIntent: string;
+    @Column({nullable: true,default: '未命名简历'})
+    resumeName: string;
+    @Column({nullable: true,default: false})
+    editActive: boolean;
+    @Column({nullable: true})
+    avatar: string;
+    
 }
 @Entity("school")
 export class schoolEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
-    @Column()
-    userId: number;
-    @Column()
-    expand: boolean;
-    @Column()
+    @Column({nullable: true})
+    resumemodelId: number;
+    @Column({nullable: true})
     title: string;
-    @Column()
+    @Column({nullable: true})
     academy: string;
-    @Column()
+    @Column({nullable: true})
     degree: string;
-    @Column()
+    @Column({nullable: true})
     major: string;
-    @Column()
+    @Column({nullable: true})
     school: string;
-    @Column()
+    @Column({nullable: true,length:10000})
     richText: string;
-    @Column({type: 'timestamp'})
-    startTime: Date
-    @Column({type: 'timestamp'})
-    endTime: Date
+    @Column({nullable: true})
+    period:string
+    @Column({nullable: true})
+    sortIndex:number
+    @Column()
+    isShow:Boolean
 }
 
 @Entity("work")
 export class workEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
-    @Column()
-    userId: number;
-    @Column()
-    expand: boolean;
-    @Column()
+    @Column({nullable: true})
+    resumemodelId: number;
+    @Column({nullable: true})
     title: string;
-    @Column()
+    @Column({nullable: true})
     experienceName: string;
-    @Column()
+    @Column({nullable: true})
     role: string;
-    @Column()
+    @Column({nullable: true})
     department: string;
-    @Column()
+    @Column({nullable: true})
     city: string;
-    @Column()
+    @Column({nullable: true,length:10000})
     richText: string;
-    @Column({type: 'timestamp'})
-    startTime: Date
-    @Column({type: 'timestamp'})
-    endTime: Date
+    @Column({nullable: true})
+    period:string
+    @Column({nullable: true})
+    sortIndex:number
+    @Column()
+    isShow:Boolean
 }
 
 @Entity("summary")
 export class summaryEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
-    @Column()
-    userId: number;
-    @Column()
+    @Column({nullable: true})
+    resumemodelId: number;
+    @Column({nullable: true})
     title: string;
-    @Column()
+    @Column({nullable: true,length:10000})
     richText: string;
+    @Column({nullable: true})
+    sortIndex:number
+    @Column()
+    isShow:Boolean
 }
 
 @Entity("project")
 export class projectEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
+    @Column({nullable: true})
+    resumemodelId: number;
+    @Column({nullable: true})
+    projectName: string;
+    @Column({nullable: true})
+    projectDescription: string;
+    @Column({nullable: true})
+    city: string;
+    @Column({nullable: true})
+    period:string
+    @Column({nullable: true,length:10000})
+    richText: string;
+    @Column({nullable: true})
+    sortIndex:number
+    @Column()
+    isShow:Boolean
+}
+@Entity("resume")
+export class resumeEntity {
+    @PrimaryGeneratedColumn()
+    id:number; // 标记为主列，值自动生成
     @Column()
     userId: number;
     @Column()
-    projectName: string;
-    @Column()
-    projectDescription: string;
-    @Column()
-    city: string;
-    @Column({type: 'timestamp'})
-    startTime: Date
-    @Column({type: 'timestamp'})
-    endTime: Date
-    @Column()
-    richText: string;
+    sortId:number
 }
+
+
+
+
+

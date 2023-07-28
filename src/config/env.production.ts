@@ -3,6 +3,7 @@
 export default {
     // 服务基本配置
     SERVICE_CONFIG: {
+      host: '0.0.0.0',
       // 端口
       port: 3000,
     },

@@ -1,0 +1,66 @@
+
+let userData = {
+    resumeMoudleMock:
+        [{
+        title:'教育经历',
+        expand:true,
+        inputList:[{
+            school:'',
+            major:'',
+            degree:'',
+            academy:'',
+            city:'',
+            Time:{
+                startTime:'',
+                endTime:''
+            },
+            richText:''
+        },
+        {
+            school:'',
+            major:'',
+            degree:'',
+            academy:'',
+            Time:{
+                startTime:'',
+                endTime:''
+            },
+            richText:''
+        }]
+    }
+    ,
+    {
+        title:'工作经历',
+        expand:true,
+        inputList:[{
+            school:'',
+            major:'',
+            degree:'',
+            academy:'',
+            Time:{
+                startTime:'',
+                endTime:''
+            },
+            richText:''
+        }]
+    }
+        ],
+    personlMoudleMock:{
+        title:'基本信息',
+        userName:'陈炫华',
+        photo:"",
+        inputList:[{
+            phoneNumber:'',
+            email:'',
+            degree:'',
+            cityYoulived:''
+        },
+        {
+            cityItent:'',
+            currentStatus:'',
+            postIntent:'',
+        }]
+    }
+}
+
+export default userData

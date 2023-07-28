@@ -6,10 +6,13 @@ import { AuthModule } from '../auth/auth.module';
 import { AuthService } from '../auth/auth.service';
 import { userEntity } from './user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { resumeEntity } from 'src/posts/posts.entity';
+
 
 
 @Module({
   imports: [
+  TypeOrmModule.forFeature([resumeEntity]),
   TypeOrmModule.forFeature([userEntity]),
   ],
   providers: [UserService, AuthService,JwtService],

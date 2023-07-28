@@ -16,7 +16,7 @@ export class UserService {
    * @param username 用户名
    */
   async findOne(userName: string): Promise<any | undefined> {
-    const sql = `select userName,password,passwordSalt from user where userName ='${userName}' `; // 一段平淡无奇的 SQL 查询语句
+    const sql = `select userName,password,passwordSalt,id from user where userName ='${userName}' `; // 一段平淡无奇的 SQL 查询语句
     try {
         const user = await this.userRepository.query(sql);
         return user;
@@ -30,7 +30,7 @@ export class UserService {
    * @param requestBody 请求体
    */
     async register(requestBody: any): Promise<any> {
-        const {  userName,password, repassword } = requestBody;
+        const { userName,password, repassword } = requestBody;
         if (password !== repassword) {
           return {
             code: 400,

@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+import { resumeEntity } from "src/posts/posts.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+
 @Entity("user")
 export class userEntity {
     @PrimaryGeneratedColumn()
@@ -21,4 +24,7 @@ export class userEntity {
 
     @Column({type: 'timestamp', default: () => "CURRENT_TIMESTAMP"})
     update_time: Date
+
+    // @OneToMany(() => resumeEntity, resume => resume.info)
+    // resume:resumeEntity[] ;
 }
