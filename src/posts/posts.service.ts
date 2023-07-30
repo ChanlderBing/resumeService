@@ -329,15 +329,19 @@ export class PostsService {
         async (transactionRepository) => { 
           const sql = `delete from resume where id = ${resumeId}`
           const sql3 = `delete from personal where id = ${resumeId}`
-          const data1 =  await this.postsRepository.query(sql)
           const sql1 = `delete from resumemodel where id = ${resumeId}`
           const sql2 = `select id,modelIndex from resumemodel where resumeId = ${resumeId}`
-          const { modelIndex } =  await this.postsRepository.query(sql)
           const data = await this.postsRepository.query(sql2)
           data.forEach(item => {
             this.moudelDetailAllDel(item.modelIndex,item.id)
           });
-          return data
+          await this.postsRepository.query(sql3)
+          
+          await this.postsRepository.query(sql1)
+          await this.postsRepository.query(sql)
+          return {
+            msg:'删除成功'
+          }
         })
         return addRes
     } catch (error) {

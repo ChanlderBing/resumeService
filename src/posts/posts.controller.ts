@@ -107,6 +107,29 @@ export class PostsController {
     async getResumeInit(){
         return await this.postsService.ResumeInit(16)
     }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('resumeDel')
+    async resumeDel(@Body() post){
+        return await this.postsService.resumeDel(post.resumeId)
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('moudelDetailDel')
+    async moudelDetailDel(@Body() post){
+        return await this.postsService.moudelDetailDel(post.moduleId,post.id)
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('moudelSwitchDown')
+    async moudelSwitchDown(@Body() post){
+        return await this.postsService.moudelSwitchDown(post.resumeId,post.moduleId,post.moduleIndex)
+    }
+    @UseGuards(AuthGuard('jwt'))
+    @Post('moudelSwitchUp')
+    async mmoudelSwitchUp(@Body() post){
+        return await this.postsService.moudelSwitchUp(post.resumeId,post.moduleId,post.moduleIndex)
+    }
 }
 
 
