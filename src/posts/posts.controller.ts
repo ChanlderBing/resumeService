@@ -115,20 +115,30 @@ export class PostsController {
     }
 
     @UseGuards(AuthGuard('jwt'))
-    @Post('moudelDetailDel')
-    async moudelDetailDel(@Body() post){
-        return await this.postsService.moudelDetailDel(post.moduleId,post.id)
+    @Post('moduleDetailDel')
+    async moduleDetailDel(@Body() post){
+        return await this.postsService.moduleDetailDel(post.moduleId,post.id)
     }
 
     @UseGuards(AuthGuard('jwt'))
-    @Post('moudelSwitchDown')
-    async moudelSwitchDown(@Body() post){
-        return await this.postsService.moudelSwitchDown(post.resumeId,post.moduleId,post.moduleIndex)
+    @Post('moduleSwitchDown')
+    async moduleSwitchDown(@Body() post){
+        return await this.postsService.moduleSwitchDown(post.resumeId,post.moduleId,post.moduleIndex)
     }
     @UseGuards(AuthGuard('jwt'))
-    @Post('moudelSwitchUp')
-    async mmoudelSwitchUp(@Body() post){
-        return await this.postsService.moudelSwitchUp(post.resumeId,post.moduleId,post.moduleIndex)
+    @Post('moduleSwitchUp')
+    async moduleSwitchUp(@Body() post){
+        return await this.postsService.moduleSwitchUp(post.resumeId,post.moduleId,post.moduleIndex)
+    }
+    @UseGuards(AuthGuard('jwt'))
+    @Post('moduleDetailSwitchUp')
+    async moduleDetailSwitchU(@Body() post){
+        return await this.postsService.moduleDetailSwitchUp(post.id,post.resumemodelId,post.moduleId,post.sortIndex)
+    }
+    @UseGuards(AuthGuard('jwt'))
+    @Post('moduleDetailSwitchDown')
+    async moduleDetailSwitchDownp(@Body() post){
+        return await this.postsService.moduleDetailSwitchDown(post.id,post.resumemodelId,post.moduleId,post.sortIndex)
     }
 }
 
