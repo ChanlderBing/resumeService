@@ -73,7 +73,7 @@ export class PostsController {
     @UseGuards(AuthGuard('jwt'))
     @Post('setSchool')
     async setSchool(@Body() post,@Req() request){
-        return await this.postsService.setSchool(10,post)
+        return await this.postsService.setSchool(null,post)
     }
     @UseGuards(AuthGuard('jwt'))
     @Get('getUserResume')
@@ -105,7 +105,7 @@ export class PostsController {
 
     @Get('getResumeInit')
     async getResumeInit(){
-        return await this.postsService.ResumeInit(16)
+        return await this.postsService.ResumeInit(1)
     }
 
     @UseGuards(AuthGuard('jwt'))

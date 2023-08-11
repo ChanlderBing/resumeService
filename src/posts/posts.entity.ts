@@ -5,8 +5,6 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGene
 export class personalEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
-    @Column()
-    resumeId:number
     @Column({length:20,nullable: true})
     userName: string;
     @Column({nullable: true})
@@ -25,6 +23,8 @@ export class personalEntity {
     currentStatus: string;
     @Column({nullable: true})
     postIntent: string;
+    @Column()
+    resumeId:number
     @Column({nullable: true,default: '未命名简历'})
     resumeName: string;
     @Column({nullable: true,default: false})
@@ -38,8 +38,6 @@ export class schoolEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
     @Column({nullable: true})
-    resumemodelId: number;
-    @Column({nullable: true})
     title: string;
     @Column({nullable: true})
     academy: string;
@@ -49,6 +47,8 @@ export class schoolEntity {
     major: string;
     @Column({nullable: true})
     school: string;
+    @Column({nullable: true})
+    resumemodelId: number;
     @Column({nullable: true,length:10000})
     richText: string;
     @Column({nullable: true})
@@ -64,8 +64,6 @@ export class workEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
     @Column({nullable: true})
-    resumemodelId: number;
-    @Column({nullable: true})
     title: string;
     @Column({nullable: true})
     experienceName: string;
@@ -75,6 +73,8 @@ export class workEntity {
     department: string;
     @Column({nullable: true})
     city: string;
+    @Column({nullable: true})
+    resumemodelId: number;
     @Column({nullable: true,length:10000})
     richText: string;
     @Column({nullable: true})
@@ -90,9 +90,9 @@ export class summaryEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
     @Column({nullable: true})
-    resumemodelId: number;
-    @Column({nullable: true})
     title: string;
+    @Column({nullable: true})
+    resumemodelId: number;
     @Column({nullable: true,length:10000})
     richText: string;
     @Column({nullable: true})
@@ -106,13 +106,13 @@ export class projectEntity {
     @PrimaryGeneratedColumn()
     id:number; // 标记为主列，值自动生成
     @Column({nullable: true})
-    resumemodelId: number;
-    @Column({nullable: true})
     projectName: string;
     @Column({nullable: true})
     projectDescription: string;
     @Column({nullable: true})
     city: string;
+    @Column({nullable: true})
+    resumemodelId: number;
     @Column({nullable: true})
     period:string
     @Column({nullable: true,length:10000})

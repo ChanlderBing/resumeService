@@ -136,7 +136,7 @@ export class PostsService {
           async (transactionRepository) => {
             const sqlToModel = `insert into resumemodel values(null,${resumeId},2,2)`
             const resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
-            const sqlToProject = `insert into project(id,resumemodelId,sortIndex) values(null,${resumemodelId},0)`
+            const sqlToProject = `insert into project(id,resumemodelId,sortIndex,isShow) values(null,${resumemodelId},0,1)`
             return  await transactionRepository.query(sqlToProject)
             }   
           );
@@ -159,7 +159,7 @@ export class PostsService {
           async (transactionRepository) => {
             const sqlToModel = `insert into resumemodel values(null,${resumeId},1,1)`
             const  resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
-            const sqlToWork = `insert into work(id,resumemodelId,sortIndex)values(null,${resumemodelId},0)`
+            const sqlToWork = `insert into work(id,resumemodelId,sortIndex,isShow)values(null,${resumemodelId},0,1)`
             return await transactionRepository.query(sqlToWork)
             }   
           );
@@ -184,9 +184,9 @@ export class PostsService {
       try {
         const addRes = await this.postsRepository.manager.transaction(
           async (transactionRepository) => {
-            const sqlToModel = `insert into resumemodel(id,resumeId,modelIndex,moudleIndex) values(null,${resumeId},0,0)`
+            const sqlToModel = `insert into resumemodel(id,resumeId,modelIndex,moduleIndex) values(null,${resumeId},0,0)`
             const  resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
-            const sqlToSchool  = `insert into school(id,resumemodelId,sortIndex) values(null,${resumemodelId},0)`
+            const sqlToSchool  = `insert into school(id,resumemodelId,sortIndex,isShow) values(null,${resumemodelId},0,1)`
             return await transactionRepository.query(sqlToSchool)
             }   
           );
@@ -204,7 +204,7 @@ export class PostsService {
         async (transactionRepository) => {
         const sqlToModel = `insert into resumemodel values(null,${resumeId},3,3)`
         const  resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
-        const sqlToSummary  = `insert into summary(id,resumemodelId,sortIndex) values(null,${resumemodelId},0)`
+        const sqlToSummary  = `insert into summary(id,resumemodelId,sortIndex,isShow) values(null,${resumemodelId},0,1)`
         return  await transactionRepository.query(sqlToSummary)
         })
         return addRes
@@ -219,17 +219,16 @@ export class PostsService {
     form.parse(request, async (err, fields, files)=> {
      var originalFileName = files.file[0].originalFilename
       if (originalFileName) {
-      let url = files.file[0].path.split('\\')[2]
-      const sqlToProject1 = `select avatar from personal where resumeId = ${fields.resumeId[0]}`
-      const fileName =  (await this.postsRepository.query(sqlToProject1))[0].avatar
-      if (fileName) {
-      unlink(`./public/upload_img/${fileName}`,(err)=>{
-        if (err) console.log(err);
-      })}
+        let url = files.file[0].path.split('\\')[2]
+        const sqlToProject1 = `select avatar from personal where resumeId = ${fields.resumeId[0]}`
+        const fileName =  (await this.postsRepository.query(sqlToProject1))[0].avatar
+        if (fileName) {
+        unlink(`./public/upload_img/${fileName}`,(err)=>{
+          if (err) console.log(err);
+        })}
       const sqlToProject = `update personal set avatar='${url}' where resumeId = ${fields.resumeId[0]}`
       const data =  await this.postsRepository.query(sqlToProject)
-      }
-      
+      } 
     })
   }
   sortab(data){
@@ -333,7 +332,7 @@ export class PostsService {
         async (transactionRepository) => {
           const sqlCheck = `select *  from  ${dyamicCom[moduleId]} where resumemodelId = ${resumemodelId}`
           const dataCheck =  await this.postsRepository.query(sqlCheck)
-          if (dataCheck.length < 2 && moduleId != 3) {
+          if (dataCheck.length <= 2 && moduleId != 3) {
             const sql = `select  id  from  ${dyamicCom[moduleId]} where resumemodelId = ${resumemodelId} and sortIndex=${sortIndex + 1}`
             const  downId =  await this.postsRepository.query(sql)
             const sqlToUp = `update ${dyamicCom[moduleId]} set sortIndex=${sortIndex} where id = ${downId[0].id}`
@@ -405,7 +404,7 @@ export class PostsService {
     }
   }
   async getUserResumeOne() {
-    const sqlToPerson = `select * from personal where resumeId =49 `
+    const sqlToPerson = `select * from personal where resumeId = 1`
     const data =  await this.postsRepository.query(sqlToPerson)
     return {
       data,
