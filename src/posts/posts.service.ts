@@ -128,7 +128,7 @@ export class PostsService {
         
   async setProject(resumeId,post) {
     if (post&&Object.keys(post).length !== 0) {
-      const sqlToProject = `insert into project values(null,'${post.projectName}','${post.projectDescription}','${post.city}',${post.resumemodelId},${post.sortIndex},'${post.period}','${post.richText}',1)`
+      const sqlToProject = `insert into project values(null,'${post.projectName}','${post.projectDescription}','${post.city}',${post.resumemodelId},'${post.period}','${post.richText}',${post.sortIndex},1)`
       return await this.postsRepository.query(sqlToProject)
     }else{
       try {
@@ -151,7 +151,7 @@ export class PostsService {
   async setWork(resumeId,post) {
     let data;
     if (post&&Object.keys(post).length !== 0) {
-      const sqlToWork = `insert into work values(null,'0','${post.experienceName}','${post.role}','${post.department}','${post.city}','${post.resumemodelId}',${post.sortIndex},'${post.period}','${post.richText}',1)`
+      const sqlToWork = `insert into work values(null,'0','${post.experienceName}','${post.role}','${post.department}','${post.city}','${post.resumemodelId}','${post.richText}','${post.period}',${post.sortIndex},1)`
       data =  await this.postsRepository.query(sqlToWork)
     }else{
       try {
@@ -175,7 +175,7 @@ export class PostsService {
   async setSchool(resumeId,post) {
     if (post&&Object.keys(post).length !== 0) {
       try {
-        const sqlToSchool = `insert into school values(null,'0','${post.academy}','${post.degree}','${post.major}','${post.school}',${post.resumemodelId},${post.sortIndex},'${post.period}','${post.richText}',1)`
+        const sqlToSchool = `insert into school values(null,'0','${post.academy}','${post.degree}','${post.major}','${post.school}',${post.resumemodelId},'${post.richText}','${post.period}',${post.sortIndex},1)`
         return await this.postsRepository.query(sqlToSchool)
       } catch (error) {
         throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -215,15 +215,29 @@ export class PostsService {
   }
   async updatePic(post,request) {
     var form = new multiparty.Form();
-    form.uploadDir='./public/upload_img'; //上传图片保存的地址 目录必须存在
+    form.uploadDir='/usr/local/nginx/upload_img/'; //上传图片保存的地址 目录必须存在
+    console.log('促发1');
     form.parse(request, async (err, fields, files)=> {
+      if (err) {
+        console.log('错误促发');
+        
+        console.log(err);
+      }
+      console.log('促发2');
+      console.log(files);
+      console.log(files.file);
      var originalFileName = files.file[0].originalFilename
+     console.log(originalFileName)
       if (originalFileName) {
-        let url = files.file[0].path.split('\\')[2]
+        console.log('促发3');
+        let url = files.file[0].path.split('/')[5]
+        console.log(files.file[0].path)
+        console.log(url)
         const sqlToProject1 = `select avatar from personal where resumeId = ${fields.resumeId[0]}`
         const fileName =  (await this.postsRepository.query(sqlToProject1))[0].avatar
+        console.log(fileName)
         if (fileName) {
-        unlink(`./public/upload_img/${fileName}`,(err)=>{
+        unlink(`/usr/local/nginx/upload_img/${fileName}`,(err)=>{
           if (err) console.log(err);
         })}
       const sqlToProject = `update personal set avatar='${url}' where resumeId = ${fields.resumeId[0]}`

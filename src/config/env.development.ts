@@ -32,10 +32,10 @@
     // 数据库配置
     DATABASE_CONFIG: {
       type: 'mysql',
-      host: '121.41.1.191',
+      host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'root',
+      password: '3927688',
       database: 'superresume',
       autoLoadEntities: true,
       synchronize: true,
