@@ -401,9 +401,9 @@ export class PostsService {
         throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
-  async ResumeInit(userId:number) {
-    const sqlToPerson = `select * from personal where resumeId in (select id from resume where userId = ${userId}) `
+  // in (select id from resume where userId = ${userId})
+  async ResumeInit(resumeId:number) {
+    const sqlToPerson = `select * from personal where resumeId = ${resumeId} `
     const data1 =  await this.postsRepository.query(sqlToPerson)
     const data = await this.getUserResume(data1[0].resumeId)
     return data
@@ -417,8 +417,10 @@ export class PostsService {
       msg:'获取成功'
     }
   }
-  async getUserResumeOne() {
-    const sqlToPerson = `select * from personal where resumeId = 1`
+  async getUserResumeOne(resumeId:number) {
+    console.log(resumeId);
+    
+    const sqlToPerson = `select * from personal where resumeId = ${resumeId}`
     const data =  await this.postsRepository.query(sqlToPerson)
     return {
       data,
@@ -469,7 +471,7 @@ export class PostsService {
         expand:true,
         inputList:data,
         title:"教育经历",
-        isShow:true,
+        isShow:false,
         moduleId:0,
         moduleIndex:moduleIndex[0].moduleIndex
       }

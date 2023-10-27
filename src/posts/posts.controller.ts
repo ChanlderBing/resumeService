@@ -99,13 +99,13 @@ export class PostsController {
     }
 
     @Get('getUserResumeOne')
-    async getUserResumeOne(){
-        return await this.postsService.getUserResumeOne()
+    async getUserResumeOne(@Query('resumeId') resumeId){
+        return await this.postsService.getUserResumeOne(resumeId)
     }
 
     @Get('getResumeInit')
-    async getResumeInit(){
-        return await this.postsService.ResumeInit(1)
+    async getResumeInit(@Query('resumeId') resumeId){
+        return await this.postsService.ResumeInit(resumeId)
     }
 
     @UseGuards(AuthGuard('jwt'))
