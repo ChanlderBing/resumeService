@@ -82,7 +82,7 @@ export class PostsService {
       }
   }
 
-  async setUserResume(userId:number=10,post) {
+  async setUserResume(userId,post) {
     try {
       const addRes = await this.postsRepository.manager.transaction(
         async (transactionRepository) => {
@@ -128,7 +128,7 @@ export class PostsService {
         
   async setProject(resumeId,post) {
     if (post&&Object.keys(post).length !== 0) {
-      const sqlToProject = `insert into project values(null,'${post.projectName}','${post.projectDescription}','${post.city}',${post.resumemodelId},'${post.period}','${post.richText}',${post.sortIndex},1)`
+      const sqlToProject = `insert into project values(null,'${post.projectName}','${post.projectDescription}','${post.city}',${post.resumemodelId},'${post.period}','${post.richText}',${post.sortIndex},0)`
       return await this.postsRepository.query(sqlToProject)
     }else{
       try {
@@ -136,7 +136,7 @@ export class PostsService {
           async (transactionRepository) => {
             const sqlToModel = `insert into resumemodel values(null,${resumeId},2,2)`
             const resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
-            const sqlToProject = `insert into project(id,resumemodelId,sortIndex,isShow) values(null,${resumemodelId},0,1)`
+            const sqlToProject = `insert into project(id,resumemodelId,sortIndex,isShow) values(null,${resumemodelId},0,0)`
             return  await transactionRepository.query(sqlToProject)
             }   
           );
@@ -151,7 +151,7 @@ export class PostsService {
   async setWork(resumeId,post) {
     let data;
     if (post&&Object.keys(post).length !== 0) {
-      const sqlToWork = `insert into work values(null,'0','${post.experienceName}','${post.role}','${post.department}','${post.city}','${post.resumemodelId}','${post.richText}','${post.period}',${post.sortIndex},1)`
+      const sqlToWork = `insert into work values(null,'0','${post.experienceName}','${post.role}','${post.department}','${post.city}','${post.resumemodelId}','${post.richText}','${post.period}',${post.sortIndex},0)`
       data =  await this.postsRepository.query(sqlToWork)
     }else{
       try {
@@ -159,7 +159,7 @@ export class PostsService {
           async (transactionRepository) => {
             const sqlToModel = `insert into resumemodel values(null,${resumeId},1,1)`
             const  resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
-            const sqlToWork = `insert into work(id,resumemodelId,sortIndex,isShow)values(null,${resumemodelId},0,1)`
+            const sqlToWork = `insert into work(id,resumemodelId,sortIndex,isShow)values(null,${resumemodelId},0,0)`
             return await transactionRepository.query(sqlToWork)
             }   
           );
@@ -175,7 +175,7 @@ export class PostsService {
   async setSchool(resumeId,post) {
     if (post&&Object.keys(post).length !== 0) {
       try {
-        const sqlToSchool = `insert into school values(null,'0','${post.academy}','${post.degree}','${post.major}','${post.school}',${post.resumemodelId},'${post.richText}','${post.period}',${post.sortIndex},1)`
+        const sqlToSchool = `insert into school values(null,'0','${post.academy}','${post.degree}','${post.major}','${post.school}',${post.resumemodelId},'${post.richText}','${post.period}',${post.sortIndex},0)`
         return await this.postsRepository.query(sqlToSchool)
       } catch (error) {
         throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -186,7 +186,7 @@ export class PostsService {
           async (transactionRepository) => {
             const sqlToModel = `insert into resumemodel(id,resumeId,modelIndex,moduleIndex) values(null,${resumeId},0,0)`
             const  resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
-            const sqlToSchool  = `insert into school(id,resumemodelId,sortIndex,isShow) values(null,${resumemodelId},0,1)`
+            const sqlToSchool  = `insert into school(id,resumemodelId,sortIndex,isShow) values(null,${resumemodelId},0,0)`
             return await transactionRepository.query(sqlToSchool)
             }   
           );
@@ -204,7 +204,7 @@ export class PostsService {
         async (transactionRepository) => {
         const sqlToModel = `insert into resumemodel values(null,${resumeId},3,3)`
         const  resumemodelId =  (await transactionRepository.query(sqlToModel)).insertId 
-        const sqlToSummary  = `insert into summary(id,resumemodelId,sortIndex,isShow) values(null,${resumemodelId},0,1)`
+        const sqlToSummary  = `insert into summary(id,resumemodelId,sortIndex,isShow) values(null,${resumemodelId},0,0)`
         return  await transactionRepository.query(sqlToSummary)
         })
         return addRes
@@ -218,18 +218,9 @@ export class PostsService {
     form.uploadDir='/usr/local/nginx/upload_img/'; //上传图片保存的地址 目录必须存在
     console.log('促发1');
     form.parse(request, async (err, fields, files)=> {
-      if (err) {
-        console.log('错误促发');
-        
-        console.log(err);
-      }
-      console.log('促发2');
-      console.log(files);
-      console.log(files.file);
      var originalFileName = files.file[0].originalFilename
      console.log(originalFileName)
       if (originalFileName) {
-        console.log('促发3');
         let url = files.file[0].path.split('/')[5]
         console.log(files.file[0].path)
         console.log(url)
@@ -328,9 +319,6 @@ export class PostsService {
           const data1 =  await this.postsRepository.query(sqlToUp)
           const sqlToDown = `update resumemodel set moduleIndex = ${moduleIndex + 1} where resumeId = ${resumeId} and modelIndex = ${moduleId}`
           const data = await this.postsRepository.query(sqlToDown)
-          console.log(sql);
-          console.log(sqlToUp);
-          console.log(sqlToDown);
           return data
         })
         return addRes
@@ -346,7 +334,7 @@ export class PostsService {
         async (transactionRepository) => {
           const sqlCheck = `select *  from  ${dyamicCom[moduleId]} where resumemodelId = ${resumemodelId}`
           const dataCheck =  await this.postsRepository.query(sqlCheck)
-          if (dataCheck.length <= 2 && moduleId != 3) {
+          if (dataCheck.length >= 2 && moduleId != 3) {
             const sql = `select  id  from  ${dyamicCom[moduleId]} where resumemodelId = ${resumemodelId} and sortIndex=${sortIndex + 1}`
             const  downId =  await this.postsRepository.query(sql)
             const sqlToUp = `update ${dyamicCom[moduleId]} set sortIndex=${sortIndex} where id = ${downId[0].id}`
@@ -372,7 +360,7 @@ export class PostsService {
     return data1
   }
   async moduleDetailAllDel(moduleId:number,resumemodelId:number) {
-    let sql = `delete  from ${dyamicCom[moduleId]} where resumemodelId = ${resumemodelId}`
+    let sql = `delete from ${dyamicCom[moduleId]} where resumemodelId = ${resumemodelId}`
     const data1 =  await this.postsRepository.query(sql)
     return data1
   }
@@ -401,13 +389,16 @@ export class PostsService {
         throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  // in (select id from resume where userId = ${userId})
-  async ResumeInit(resumeId:number) {
-    const sqlToPerson = `select * from personal where resumeId = ${resumeId} `
+  async ResumeInitByJWT(userId:number) {
+    const sqlToPerson = `select * from resume where userId = ${userId} `
     const data1 =  await this.postsRepository.query(sqlToPerson)
-    const data = await this.getUserResume(data1[0].resumeId)
+    if (data1 &&data1.length !== 0) {
+    const data = await this.getUserResume(data1[0].id)
     return data
+    }
+    return []
   }
+
   async getUserResumeAll(userId:number) {
     const sqlToPerson = `select * from personal where resumeId in(select id from resume where userId = ${userId}) `
     const data =  await this.postsRepository.query(sqlToPerson)
@@ -418,8 +409,6 @@ export class PostsService {
     }
   }
   async getUserResumeOne(resumeId:number) {
-    console.log(resumeId);
-    
     const sqlToPerson = `select * from personal where resumeId = ${resumeId}`
     const data =  await this.postsRepository.query(sqlToPerson)
     return {
@@ -444,14 +433,14 @@ export class PostsService {
     const data =  (await this.postsRepository.query(sqlToPerson))[0]
       return {
         inputList:[{
-          cityYoulived:data?.cityYoulived,
-          degree:data?.degree,
-          email:data?.email,
           phoneNumber:data?.phoneNumber,
+          email:data?.email,
+          degree:data?.degree,
+          cityYoulived:data?.cityYoulived,
         },{
+          postIntent:data?.postIntent,
           cityItent:data?.cityItent,
           currentStatus:data?.currentStatus,
-          postIntent:data?.postIntent
         }],
         title:"基本信息",
         userName:data?.userName,
@@ -466,18 +455,17 @@ export class PostsService {
     const  sql = `select  moduleIndex from resumemodel where resumeId = ${resumeId} and modelIndex = 0`
     const  moduleIndex =  await this.postsRepository.query(sql)
     const data =  await this.postsRepository.query(sqlToSchool)
-      Logger.log(`${inspect(data)}`)
       return {
         expand:true,
         inputList:data,
         title:"教育经历",
-        isShow:false,
+        isShow:true,
         moduleId:0,
         moduleIndex:moduleIndex[0].moduleIndex
       }
     }
   async getWork(resumeId:number) {
-    const sqlToWork = `select  * from work where resumemodelId in (select id from resumemodel where 
+    const sqlToWork = `select id, experienceName,role, department,city,period,richText,resumemodelId,isShow,sortIndex from work where resumemodelId in (select id from resumemodel where 
       resumeId = ${resumeId} and modelIndex = 1)`
     const data =  await this.postsRepository.query(sqlToWork)
     const  sql = `select  moduleIndex from resumemodel where resumeId = ${resumeId} and modelIndex = 1`

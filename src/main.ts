@@ -24,7 +24,6 @@ async function bootstrap() {
   // 3.配置静态资源目录
    app.useStaticAssets('../public');
    app.useStaticAssets('../dist');
-  //await app.listen(3000);
    await app.listen(8080);
 }
 bootstrap();

@@ -83,7 +83,7 @@ export class PostsController {
     @UseGuards(AuthGuard('jwt'))
     @Get('ResumeInitByJWT')
     async ResumeInit(@Req() request){
-        return await this.postsService.ResumeInit(request.user.id)
+        return await this.postsService.ResumeInitByJWT(request.user.id)
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -105,7 +105,7 @@ export class PostsController {
 
     @Get('getResumeInit')
     async getResumeInit(@Query('resumeId') resumeId){
-        return await this.postsService.ResumeInit(resumeId)
+        return await this.postsService.getUserResume(resumeId)
     }
 
     @UseGuards(AuthGuard('jwt'))
